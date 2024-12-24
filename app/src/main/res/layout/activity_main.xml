@@ -5,15 +5,42 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_background"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+<LinearLayout
+    android:layout_width="match_parent"
+    android:weightSum="2"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginHorizontal="@dimen/margin_main"
+    android:layout_marginBottom="@dimen/margin_half"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <Button
+        android:id="@+id/btnCategories"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="@dimen/margin_nav_button"
+        android:layout_weight="1"
+        android:backgroundTint="@color/btn_categories"
+        android:text="@string/category_button"
+        style="@style/StyleNavButton"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_nav_button"
+        android:layout_weight="1"
+        android:backgroundTint="@color/btn_favorites"
+        android:text="@string/favorite_button"
+        app:icon="@drawable/ic_heart_empty"
+        app:iconGravity="end"
+        app:iconSize="@dimen/ic_favorites_size"
+        style="@style/StyleNavButton"/>
+</LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
