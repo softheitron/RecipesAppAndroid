@@ -27,4 +27,9 @@ class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _categoriesListBinding = null
+    }
+
 }
