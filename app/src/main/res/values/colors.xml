@@ -5,4 +5,6 @@
     <color name="main_background">#F4FAFF</color>
     <color name="btn_categories">#525DC0</color>
     <color name="btn_favorites">#E13E3E</color>
+    <color name="ma_main_color">#5F3678</color>
+    <color name="card_description_text">#666666</color>
 </resources>
