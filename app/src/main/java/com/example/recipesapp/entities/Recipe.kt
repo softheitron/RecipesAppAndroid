@@ -1,4 +1,4 @@
-package com.example.recipesapp
+package com.example.recipesapp.entities
 
 data class Recipe(
     val id: Int,

@@ -40,7 +40,7 @@
             android:layout_marginEnd="@dimen/margin_nav_button"
             android:layout_weight="1"
             android:backgroundTint="@color/btn_categories"
-            android:text="@string/category_button" />
+            android:text="@string/categories_text" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFavorites"
