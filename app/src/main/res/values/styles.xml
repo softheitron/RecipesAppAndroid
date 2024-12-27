@@ -18,7 +18,7 @@
     <style name="StyleCardDescription" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/style_description_text_size</item>
         <item name="android:fontFamily">@font/montserrat_medium</item>
-        <item name="android:textColor">@color/card_description_text</item>
+        <item name="android:textColor">@color/card_description_color</item>
     </style>
     
     <style name="StyleNavButton" parent="Widget.Material3.Button">

@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:layout_height="220dp"
+    android:layout_height="@dimen/item_category_main"
     android:layout_width="match_parent"
     android:layout_margin="@dimen/margin_half"
     app:cardCornerRadius="@dimen/margin_half"
@@ -16,7 +16,6 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/card_image_height"
-            android:contentDescription="TODO"
             android:scaleType="centerCrop"
             android:src="@drawable/bcg_categories"/>
 

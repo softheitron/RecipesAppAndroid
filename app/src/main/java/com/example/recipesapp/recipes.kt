@@ -1,5 +1,7 @@
 package com.example.recipesapp
 
+import com.example.recipesapp.entities.Category
+
 object STUB {
 
     private val categories = listOf(
