@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <style name="StyleTitle14" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/style_title_text_size</item>
         <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
@@ -20,7 +20,7 @@
         <item name="android:fontFamily">@font/montserrat_medium</item>
         <item name="android:textColor">@color/card_description_color</item>
     </style>
-    
+
     <style name="StyleNavButton" parent="Widget.Material3.Button">
         <item name="android:textAppearance">@style/StyleTitle14</item>
         <item name="cornerRadius">@dimen/margin_half</item>
@@ -32,5 +32,5 @@
         <item name="android:padding">@dimen/header_text_padding</item>
         <item name="android:gravity">center</item>
     </style>
-    
+
 </resources>
