@@ -20,8 +20,9 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemCategoryBinding.inflate(
-            LayoutInflater.from(parent.context)
-        )
+            LayoutInflater.from(parent.context),
+            parent,
+            false)
 
         return ViewHolder(binding)
     }
