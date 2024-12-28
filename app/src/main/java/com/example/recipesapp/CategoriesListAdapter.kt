@@ -22,7 +22,8 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         val binding = ItemCategoryBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
-            false)
+            false
+        )
 
         return ViewHolder(binding)
     }
