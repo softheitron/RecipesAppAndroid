@@ -29,12 +29,14 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.commit {
                     setReorderingAllowed(true)
                     replace<FavoritesFragment>(R.id.fragmentContainerView)
+                    addToBackStack(null)
                 }
             }
             btnCategories.setOnClickListener {
                 supportFragmentManager.commit {
                     setReorderingAllowed(true)
                     replace<CategoriesListFragment>(R.id.fragmentContainerView)
+                    addToBackStack(null)
                 }
             }
         }

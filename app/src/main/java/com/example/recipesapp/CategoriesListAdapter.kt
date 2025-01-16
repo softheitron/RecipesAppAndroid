@@ -11,7 +11,7 @@ import com.example.recipesapp.entities.Category
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
-        var itemClickListener: OnItemClickListener? = null
+    private var itemClickListener: OnItemClickListener? = null
 
     class ViewHolder(private val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -36,7 +36,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         val context = holder.itemView.context
         holder.titleText.text = category.title
         holder.descriptionText.text = category.description
-        holder.cardItem.setOnClickListener { itemClickListener?.onItemClick() }
+        holder.cardItem.setOnClickListener { itemClickListener?.onItemClick(category.id) }
 
         val drawable =
             try {
