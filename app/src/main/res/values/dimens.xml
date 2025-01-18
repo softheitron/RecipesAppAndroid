@@ -8,8 +8,9 @@
     <dimen name="ic_favorites_size">24dp</dimen>
     <dimen name="header_height">224dp</dimen>
     <dimen name="item_category_main">220dp</dimen>
-    <dimen name="card_image_height">130dp</dimen>
-    <dimen name="card_text_part_height">90dp</dimen>
+    <dimen name="category_card_image_height">130dp</dimen>
+    <dimen name="category_card_text_part_height">90dp</dimen>
+    <dimen name="recipe_card_image_height">100dp</dimen>
 
 
     <dimen name="style_description_text_size">12sp</dimen>

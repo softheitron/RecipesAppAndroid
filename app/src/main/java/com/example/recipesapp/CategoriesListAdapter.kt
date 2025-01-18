@@ -13,10 +13,10 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
 
     private var itemClickListener: OnItemClickListener? = null
 
-    class ViewHolder(private val binding: ItemCategoryBinding) :
+    class ViewHolder(binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val categoryImage = binding.imgCategory
-        val titleText = binding.tvTitle
+        val titleText = binding.tvCategoryTitle
         val descriptionText = binding.tvDescription
         val cardItem = binding.itemCategoryCard
     }
@@ -46,7 +46,6 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
                 null
             }
         holder.categoryImage.setImageDrawable(drawable)
-
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
