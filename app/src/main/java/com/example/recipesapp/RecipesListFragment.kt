@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -13,6 +14,10 @@ import com.example.recipesapp.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
 import com.example.recipesapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
+
+    companion object {
+        const val ARG_RECIPE = "arg_recipe"
+    }
 
     private var categoryId: Int? = null
     private var categoryName: String? = null
@@ -54,9 +59,12 @@ class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
+        val recipe = STUB.getRecipeById(recipeId)
+        val bundle = bundleOf(ARG_RECIPE to recipe)
+
         parentFragmentManager.commit {
             setReorderingAllowed(true)
-            replace<RecipeFragment>(R.id.fragmentContainerView)
+            replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
             addToBackStack(null)
         }
     }
