@@ -14,7 +14,7 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
     private var itemClickListener: OnItemClickListener? = null
 
     class ViewHolder(binding: ItemRecipeBinding) :
-    RecyclerView.ViewHolder(binding.root){
+        RecyclerView.ViewHolder(binding.root) {
         val titleText = binding.tvRecipeTitle
         val recipeImage = binding.imgRecipe
         val itemCard = binding.itemRecipeCard
