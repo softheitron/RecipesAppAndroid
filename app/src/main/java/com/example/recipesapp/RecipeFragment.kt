@@ -1,13 +1,18 @@
 package com.example.recipesapp
 
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.example.recipesapp.entities.Recipe
+import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment(R.layout.fragment_recipe) {
 
@@ -36,8 +41,47 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
             args.getParcelable(RecipesListFragment.ARG_RECIPE)
         }
 
+        recipe?.let {
+            initUi(it)
+            initRecycler(it)
+        }
+    }
+
+    private fun initUi(recipe: Recipe) {
+        val context = recipeBinding.root.context
+        val drawable =
+            try {
+                Drawable.createFromStream(context.assets.open(recipe.imageUrl), null)
+            } catch (e: Exception) {
+                Log.d("!!!", "Image file not found ${recipe.imageUrl}")
+                null
+            }
         with(recipeBinding) {
-            tvRecipeTitle.text = recipe?.title
+            imgRecipeTitle.setImageDrawable(drawable)
+            tvRecipeHeader.text = recipe.title
+        }
+    }
+
+    private fun initRecycler(recipe: Recipe) {
+        val recyclerIngredients = IngredientsAdapter(recipe.ingredients)
+        val recyclerMethod = MethodAdapter(recipe.method)
+        val divider = MaterialDividerItemDecoration(
+            requireContext(),
+            LinearLayoutManager.VERTICAL
+        ).apply {
+            dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+            dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+            isLastItemDecorated = false
+        }
+        with(recipeBinding) {
+            rvIngredients.apply {
+                adapter = recyclerIngredients
+                addItemDecoration(divider)
+            }
+            rvMethod.apply {
+                adapter = recyclerMethod
+                addItemDecoration(divider)
+            }
         }
     }
 

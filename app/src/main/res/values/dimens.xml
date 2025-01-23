@@ -3,18 +3,24 @@
 
     <dimen name="margin_main">16dp</dimen>
     <dimen name="margin_half">8dp</dimen>
-    <dimen name="header_text_padding">10dp</dimen>
+    <dimen name="margin_quarter">4dp</dimen>
+    <dimen name="margin_recipe_rv">12dp</dimen>
     <dimen name="margin_nav_button">2dp</dimen>
+    <dimen name="divider_thickness">1dp</dimen>
+    <dimen name="margin_ingredients_section">6dp</dimen>
+    <dimen name="header_text_padding">10dp</dimen>
     <dimen name="ic_favorites_size">24dp</dimen>
     <dimen name="header_height">224dp</dimen>
     <dimen name="item_category_main">220dp</dimen>
     <dimen name="category_card_image_height">130dp</dimen>
     <dimen name="category_card_text_part_height">90dp</dimen>
     <dimen name="recipe_card_image_height">100dp</dimen>
+    <dimen name="recipe_title_text_width">242dp</dimen>
 
 
     <dimen name="style_description_text_size">12sp</dimen>
     <dimen name="style_title_text_size">14sp</dimen>
+    <dimen name="portion_text_size">16sp</dimen>
     <dimen name="style_category_text_size">20sp</dimen>
 
 </resources>

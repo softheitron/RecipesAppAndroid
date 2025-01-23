@@ -33,4 +33,28 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="StyleMontserratRegular14" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/style_title_text_size</item>
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:textColor">@color/card_description_color</item>
+    </style>
+
+    <style name="StyleRecipePortions" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/portion_text_size</item>
+        <item name="fontFamily">@font/montserrat_medium</item>
+        <item name="android:textColor">@color/portions_text_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="StyleMethod" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/style_title_text_size</item>
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:textColor">@color/card_description_color</item>
+    </style>
+
+    <style name="StyleDivider" parent="Widget.MaterialComponents.MaterialDivider">
+        <item name="dividerColor">@color/divider_color</item>
+        <item name="dividerThickness">@dimen/divider_thickness</item>
+    </style>
+
 </resources>
