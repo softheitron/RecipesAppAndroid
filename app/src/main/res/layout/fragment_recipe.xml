@@ -23,18 +23,29 @@
                 android:scaleType="centerCrop"
                 tools:src="@drawable/bcg_recipes_list" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="@dimen/favorites_icon_size"
+                android:layout_height="@dimen/favorites_icon_size"
+                android:layout_marginTop="@dimen/margin_main"
+                android:layout_marginEnd="@dimen/margin_main"
+                android:background="@drawable/ic_heart"
+                android:contentDescription="@string/cd_add_to_fav_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tvRecipeHeader"
                 style="@style/StyleHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/margin_main"
                 android:layout_marginBottom="@dimen/margin_main"
                 android:maxWidth="@dimen/recipe_title_text_width"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="Острый гамбургер" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
