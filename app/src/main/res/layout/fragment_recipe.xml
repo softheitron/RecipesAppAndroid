@@ -38,8 +38,6 @@
                 style="@style/StyleHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_main"
-                android:layout_marginBottom="@dimen/margin_main"
                 android:maxWidth="@dimen/recipe_title_text_width"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -48,27 +46,52 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            style="@style/StyleTitle20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_main"
-            android:layout_marginTop="@dimen/margin_main"
-            android:layout_marginBottom="@dimen/margin_ingredients_section"
-            android:text="@string/recipe_ingredients_text"
-            android:textColor="@color/ma_ingredient_title_color" />
-
-        <TextView
-            style="@style/StyleRecipePortions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_main"
-            android:layout_marginBottom="@dimen/margin_ingredients_section"
-            android:text="@string/recipe_portions_text" />
-
-        <com.google.android.material.divider.MaterialDivider
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_main">
+
+            <TextView
+                android:id="@+id/tvIngredients"
+                style="@style/StyleTitle20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/ma_ingredient_title_color"
+                android:text="@string/recipe_ingredients_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvPortions"
+                style="@style/StyleRecipePortions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recipe_portions_text"
+                android:layout_marginTop="@dimen/margin_ingredients_section"
+                app:layout_constraintTop_toBottomOf="@id/tvIngredients"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/tvPortionsAmount"
+                style="@style/StyleRecipePortions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="3"
+                android:layout_marginTop="@dimen/margin_ingredients_section"
+                android:layout_marginStart="@dimen/margin_ingredients_section"
+                app:layout_constraintTop_toBottomOf="@id/tvIngredients"
+                app:layout_constraintStart_toEndOf="@id/tvPortions"/>
+
+            <SeekBar
+                android:id="@+id/sbSelectPortions"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/seek_bar_height"
+                android:layout_marginTop="@dimen/margin_ingredients_section"
+                android:min="1"
+                android:max="5"
+                app:layout_constraintTop_toBottomOf="@id/tvPortions"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
@@ -76,10 +99,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_main"
             android:background="@drawable/rv_white_background"
-            android:paddingStart="@dimen/margin_recipe_rv"
-            android:paddingTop="@dimen/margin_quarter"
-            android:paddingEnd="@dimen/margin_recipe_rv"
-            android:paddingBottom="@dimen/margin_quarter"
+            android:paddingHorizontal="@dimen/margin_recipe_rv"
+            android:paddingVertical="@dimen/margin_quarter"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="1"
             tools:itemCount="9"
@@ -99,10 +120,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_main"
             android:background="@drawable/rv_white_background"
-            android:paddingStart="@dimen/margin_recipe_rv"
-            android:paddingTop="@dimen/margin_quarter"
-            android:paddingEnd="@dimen/margin_recipe_rv"
-            android:paddingBottom="@dimen/margin_quarter"
+            android:paddingHorizontal="@dimen/margin_recipe_rv"
+            android:paddingVertical="@dimen/margin_quarter"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="1"
             tools:itemCount="5"

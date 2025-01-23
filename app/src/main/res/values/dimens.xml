@@ -17,6 +17,7 @@
     <dimen name="recipe_card_image_height">100dp</dimen>
     <dimen name="recipe_title_text_width">242dp</dimen>
     <dimen name="favorites_icon_size">40dp</dimen>
+    <dimen name="seek_bar_height">30dp</dimen>
 
 
     <dimen name="style_description_text_size">12sp</dimen>

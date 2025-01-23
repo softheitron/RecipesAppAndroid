@@ -35,7 +35,7 @@
         <Button
             android:id="@+id/btnCategories"
             style="@style/StyleNavButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_nav_button"
             android:layout_weight="1"
@@ -45,14 +45,14 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFavorites"
             style="@style/StyleNavButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_nav_button"
             android:layout_weight="1"
             android:backgroundTint="@color/btn_favorites"
             android:text="@string/favorite_button"
             app:icon="@drawable/ic_heart_empty"
-            app:iconGravity="end"
+            app:iconGravity="textEnd"
             app:iconSize="@dimen/ic_favorites_size" />
     </LinearLayout>
 
