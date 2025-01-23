@@ -33,18 +33,23 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tvRecipeHeader"
-                style="@style/StyleHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_main"
                 android:layout_marginBottom="@dimen/margin_main"
-                android:maxWidth="@dimen/recipe_title_text_width"
-                android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="Острый гамбургер" />
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+                <TextView
+                    android:id="@+id/tvRecipeHeader"
+                    style="@style/StyleHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|bottom"
+                    tools:text="Острый гамбургер" />
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

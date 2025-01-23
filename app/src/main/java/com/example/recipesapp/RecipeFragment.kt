@@ -48,10 +48,9 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     }
 
     private fun initUi(recipe: Recipe) {
-        val context = recipeBinding.root.context
         val drawable =
             try {
-                Drawable.createFromStream(context.assets.open(recipe.imageUrl), null)
+                Drawable.createFromStream(requireContext().assets.open(recipe.imageUrl), null)
             } catch (e: Exception) {
                 Log.d("!!!", "Image file not found ${recipe.imageUrl}")
                 null
