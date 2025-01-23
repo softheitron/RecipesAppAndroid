@@ -6,5 +6,8 @@
     <color name="btn_categories">#525DC0</color>
     <color name="btn_favorites">#E13E3E</color>
     <color name="ma_main_color">#5F3678</color>
+    <color name="ma_ingredient_title_color">#422952</color>
     <color name="card_description_color">#666666</color>
+    <color name="portions_text_color">#626466</color>
+    <color name="divider_color">#F5F5F5</color>
 </resources>

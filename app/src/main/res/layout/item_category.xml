@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_category_main"
     android:layout_margin="@dimen/margin_half"
-    android:background="@color/white"
     android:clickable="true"
     android:foreground="?selectableItemBackground"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/margin_half">
 
     <LinearLayout
