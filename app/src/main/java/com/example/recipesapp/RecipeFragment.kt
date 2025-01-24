@@ -93,9 +93,9 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                     tvPortionsAmount.text = String.format(progress.toString())
                 }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?){}
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-                override fun onStopTrackingTouch(seekBar: SeekBar?){}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 
             })
         }

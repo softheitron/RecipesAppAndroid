@@ -8,7 +8,7 @@ import com.example.recipesapp.databinding.ItemMethodBinding
 class MethodAdapter(private val dataSet: List<String>) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
-        private val positionIncrement = 1
+    private val positionIncrement = 1
 
     class ViewHolder(binding: ItemMethodBinding) :
         RecyclerView.ViewHolder(binding.root) {

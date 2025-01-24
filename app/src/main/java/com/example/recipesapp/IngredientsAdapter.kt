@@ -1,6 +1,5 @@
 package com.example.recipesapp
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +36,6 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
             } else {
                 "%.1f".format(multipliedValue)
             }
-        Log.d("!!!", ingredientsQuantity)
         holder.description.text = ingredient.description
         holder.quantity.text = ingredientsQuantity
         holder.measure.text = ingredient.unitOfMeasure
