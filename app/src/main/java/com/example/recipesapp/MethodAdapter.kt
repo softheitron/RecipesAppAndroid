@@ -25,8 +25,8 @@ class MethodAdapter(private val dataSet: List<String>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val ingredient = "${position + positionIncrement}.${dataSet[position]}"
-        holder.method.text = ingredient
+        val method = "${position + positionIncrement}. ${dataSet[position]}"
+        holder.method.text = method
     }
 
     override fun getItemCount(): Int = dataSet.size
