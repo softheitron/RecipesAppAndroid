@@ -59,4 +59,9 @@
         <item name="dividerThickness">@dimen/divider_thickness</item>
     </style>
 
+    <style name="styleSeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:thumb">@drawable/shape_seekbar_thumb</item>
+        <item name="android:progressDrawable">@drawable/shape_seekbar_progress</item>
+    </style>
+
 </resources>

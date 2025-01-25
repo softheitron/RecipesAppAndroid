@@ -10,4 +10,6 @@
     <color name="card_description_color">#666666</color>
     <color name="portions_text_color">#626466</color>
     <color name="divider_color">#F5F5F5</color>
+    <color name="sb_thumb">#525DC0</color>
+    <color name="sb_progress_bar">#A1A9F9</color>
 </resources>
