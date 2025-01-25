@@ -79,7 +79,7 @@
                 android:layout_marginTop="@dimen/margin_ingredients_section"
                 android:min="1"
                 android:max="5"
-                android:progress="3"/>
+                android:progress="1"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
