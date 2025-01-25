@@ -69,9 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/recipe_portions_text"
                 android:layout_marginTop="@dimen/margin_ingredients_section"
-                android:layout_marginStart="@dimen/margin_main"
-                app:layout_constraintTop_toBottomOf="@id/tvIngredients"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:layout_marginStart="@dimen/margin_main"/>
 
             <SeekBar
                 android:id="@+id/sbSelectPortions"
@@ -82,8 +80,7 @@
                 android:max="5"
                 android:progress="1"
                 android:layout_marginStart="@dimen/margin_main"
-                android:layout_marginEnd="@dimen/margin_main"
-                app:layout_constraintTop_toBottomOf="@id/tvPortions"/>
+                android:layout_marginEnd="@dimen/margin_main"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
