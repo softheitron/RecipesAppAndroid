@@ -59,7 +59,8 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         with(recipeBinding) {
             imgRecipeTitle.setImageDrawable(drawable)
             tvRecipeHeader.text = recipe.title
-            tvPortionsAmount.text = String.format(sbSelectPortions.progress.toString())
+            tvPortions.text =
+                "${getString(R.string.recipe_portions_text)} ${sbSelectPortions.progress}"
         }
     }
 
@@ -90,7 +91,7 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                     fromUser: Boolean
                 ) {
                     recyclerIngredients.updateIngredients(progress)
-                    tvPortionsAmount.text = String.format(progress.toString())
+                    tvPortions.text = "${getString(R.string.recipe_portions_text)} $progress"
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}
