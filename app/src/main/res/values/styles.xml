@@ -31,6 +31,8 @@
         <item name="android:background">@drawable/categories_text_background</item>
         <item name="android:padding">@dimen/header_text_padding</item>
         <item name="android:gravity">center</item>
+        <item name="android:layout_marginStart">@dimen/margin_main</item>
+        <item name="android:layout_marginBottom">@dimen/margin_main</item>
     </style>
 
     <style name="StyleMontserratRegular14" parent="TextAppearance.AppCompat">

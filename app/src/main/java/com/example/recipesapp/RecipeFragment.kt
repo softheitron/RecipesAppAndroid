@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -58,6 +59,8 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         with(recipeBinding) {
             imgRecipeTitle.setImageDrawable(drawable)
             tvRecipeHeader.text = recipe.title
+            tvPortions.text =
+                "${getString(R.string.recipe_portions_text)} ${sbSelectPortions.progress}"
         }
     }
 
@@ -81,6 +84,21 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 adapter = recyclerMethod
                 addItemDecoration(divider)
             }
+            sbSelectPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    recyclerIngredients.updateIngredients(progress)
+                    tvPortions.text = "${getString(R.string.recipe_portions_text)} $progress"
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+            })
         }
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    
     <dimen name="margin_main">16dp</dimen>
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_quarter">4dp</dimen>
@@ -15,8 +15,8 @@
     <dimen name="category_card_image_height">130dp</dimen>
     <dimen name="category_card_text_part_height">90dp</dimen>
     <dimen name="recipe_card_image_height">100dp</dimen>
-    <dimen name="recipe_title_text_width">242dp</dimen>
     <dimen name="favorites_icon_size">40dp</dimen>
+    <dimen name="seek_bar_height">30dp</dimen>
 
 
     <dimen name="style_description_text_size">12sp</dimen>

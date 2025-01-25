@@ -6,5 +6,5 @@
     <string name="cd_add_to_fav_button">добавить в избранное</string>
     <string name="recipe_ingredients_text">ингредиенты</string>
     <string name="recipe_method_text">способ приготовления</string>
-    <string name="recipe_portions_text">Порции: </string>
+    <string name="recipe_portions_text">Порции:</string>
 </resources>

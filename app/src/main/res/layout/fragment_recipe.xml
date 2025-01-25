@@ -35,9 +35,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_main"
-                android:layout_marginBottom="@dimen/margin_main"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -47,33 +45,42 @@
                     style="@style/StyleHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
                     android:layout_gravity="start|bottom"
                     tools:text="Острый гамбургер" />
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            style="@style/StyleTitle20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_main"
-            android:layout_marginTop="@dimen/margin_main"
-            android:layout_marginBottom="@dimen/margin_ingredients_section"
-            android:text="@string/recipe_ingredients_text"
-            android:textColor="@color/ma_ingredient_title_color" />
+            <TextView
+                android:id="@+id/tvIngredients"
+                style="@style/StyleTitle20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginTop="@dimen/margin_main"
+                android:textColor="@color/ma_ingredient_title_color"
+                android:text="@string/recipe_ingredients_text" />
 
-        <TextView
-            style="@style/StyleRecipePortions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_main"
-            android:layout_marginBottom="@dimen/margin_ingredients_section"
-            android:text="@string/recipe_portions_text" />
+            <TextView
+                android:id="@+id/tvPortions"
+                style="@style/StyleRecipePortions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recipe_portions_text"
+                android:layout_marginTop="@dimen/margin_ingredients_section"
+                android:layout_marginStart="@dimen/margin_main"/>
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            <SeekBar
+                android:id="@+id/sbSelectPortions"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/seek_bar_height"
+                android:layout_marginTop="@dimen/margin_ingredients_section"
+                android:min="1"
+                android:max="5"
+                android:progress="1"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginEnd="@dimen/margin_main"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
@@ -81,10 +88,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_main"
             android:background="@drawable/rv_white_background"
-            android:paddingStart="@dimen/margin_recipe_rv"
-            android:paddingTop="@dimen/margin_quarter"
-            android:paddingEnd="@dimen/margin_recipe_rv"
-            android:paddingBottom="@dimen/margin_quarter"
+            android:paddingHorizontal="@dimen/margin_recipe_rv"
+            android:paddingVertical="@dimen/margin_quarter"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="1"
             tools:itemCount="9"
@@ -104,10 +109,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_main"
             android:background="@drawable/rv_white_background"
-            android:paddingStart="@dimen/margin_recipe_rv"
-            android:paddingTop="@dimen/margin_quarter"
-            android:paddingEnd="@dimen/margin_recipe_rv"
-            android:paddingBottom="@dimen/margin_quarter"
+            android:paddingHorizontal="@dimen/margin_recipe_rv"
+            android:paddingVertical="@dimen/margin_quarter"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="1"
             tools:itemCount="5"
