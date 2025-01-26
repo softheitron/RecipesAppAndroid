@@ -4,6 +4,7 @@
     <dimen name="margin_main">16dp</dimen>
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_quarter">4dp</dimen>
+    <dimen name="margin_zero">0dp</dimen>
     <dimen name="margin_recipe_rv">12dp</dimen>
     <dimen name="margin_nav_button">2dp</dimen>
     <dimen name="divider_thickness">1dp</dimen>
@@ -17,6 +18,7 @@
     <dimen name="recipe_card_image_height">100dp</dimen>
     <dimen name="favorites_icon_size">40dp</dimen>
     <dimen name="seek_bar_height">30dp</dimen>
+    <dimen name="seek_bar_length">328dp</dimen>
 
 
     <dimen name="style_description_text_size">12sp</dimen>

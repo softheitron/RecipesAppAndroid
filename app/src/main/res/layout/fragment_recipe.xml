@@ -72,15 +72,17 @@
                 android:layout_marginStart="@dimen/margin_main"/>
 
             <SeekBar
+                style="@style/styleSeekBar"
                 android:id="@+id/sbSelectPortions"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/seek_bar_height"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_ingredients_section"
+                android:paddingStart="@dimen/margin_quarter"
+                android:paddingEnd="@dimen/margin_zero"
+                android:layout_marginHorizontal="@dimen/margin_main"
                 android:min="1"
                 android:max="5"
-                android:progress="1"
-                android:layout_marginStart="@dimen/margin_main"
-                android:layout_marginEnd="@dimen/margin_main"/>
+                android:progress="1"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
