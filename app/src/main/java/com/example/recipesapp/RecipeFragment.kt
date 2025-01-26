@@ -21,6 +21,7 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     private val recipeBinding
         get() = _recipeBinding
             ?: throw IllegalStateException("Recipes List Binding, must not be null")
+    private var iconState = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,11 +57,20 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 Log.d("!!!", "Image file not found ${recipe.imageUrl}")
                 null
             }
+        var iconState = false
         with(recipeBinding) {
             imgRecipeTitle.setImageDrawable(drawable)
             tvRecipeHeader.text = recipe.title
             tvPortions.text =
                 "${getString(R.string.recipe_portions_text)} ${sbSelectPortions.progress}"
+            btnAddToFavorites.apply {
+                setImageResource(R.drawable.ic_heart_empty)
+                setOnClickListener {
+                    setImageResource(
+                        if (iconState) R.drawable.ic_heart_empty else R.drawable.ic_heart)
+                    iconState = !iconState
+                }
+            }
         }
     }
 

@@ -23,66 +23,70 @@
                 android:scaleType="centerCrop"
                 tools:src="@drawable/bcg_recipes_list" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <ImageButton
+                android:id="@+id/btnAddToFavorites"
                 android:layout_width="@dimen/favorites_icon_size"
                 android:layout_height="@dimen/favorites_icon_size"
                 android:layout_marginTop="@dimen/margin_main"
                 android:layout_marginEnd="@dimen/margin_main"
-                android:background="@drawable/ic_heart"
+                android:background="@null"
                 android:contentDescription="@string/cd_add_to_fav_button"
+                android:foreground="?selectableItemBackground"
+                android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_heart_empty" />
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                >
+                app:layout_constraintStart_toStartOf="parent">
+
                 <TextView
                     android:id="@+id/tvRecipeHeader"
                     style="@style/StyleHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAlignment="textStart"
                     android:layout_gravity="start|bottom"
+                    android:textAlignment="textStart"
                     tools:text="Острый гамбургер" />
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tvIngredients"
-                style="@style/StyleTitle20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_main"
-                android:layout_marginTop="@dimen/margin_main"
-                android:textColor="@color/ma_ingredient_title_color"
-                android:text="@string/recipe_ingredients_text" />
+        <TextView
+            android:id="@+id/tvIngredients"
+            style="@style/StyleTitle20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_main"
+            android:text="@string/recipe_ingredients_text"
+            android:textColor="@color/ma_ingredient_title_color" />
 
-            <TextView
-                android:id="@+id/tvPortions"
-                style="@style/StyleRecipePortions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/recipe_portions_text"
-                android:layout_marginTop="@dimen/margin_ingredients_section"
-                android:layout_marginStart="@dimen/margin_main"/>
+        <TextView
+            android:id="@+id/tvPortions"
+            style="@style/StyleRecipePortions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_ingredients_section"
+            android:text="@string/recipe_portions_text" />
 
-            <SeekBar
-                style="@style/styleSeekBar"
-                android:id="@+id/sbSelectPortions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_ingredients_section"
-                android:paddingStart="@dimen/margin_quarter"
-                android:paddingEnd="@dimen/margin_zero"
-                android:layout_marginHorizontal="@dimen/margin_main"
-                android:min="1"
-                android:max="5"
-                android:progress="1"/>
+        <SeekBar
+            android:id="@+id/sbSelectPortions"
+            style="@style/styleSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_ingredients_section"
+            android:max="5"
+            android:min="1"
+            android:paddingStart="@dimen/margin_quarter"
+            android:paddingEnd="@dimen/margin_zero"
+            android:progress="1" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
