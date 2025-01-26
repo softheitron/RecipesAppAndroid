@@ -57,7 +57,6 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 Log.d("!!!", "Image file not found ${recipe.imageUrl}")
                 null
             }
-        var iconState = false
         with(recipeBinding) {
             imgRecipeTitle.setImageDrawable(drawable)
             tvRecipeHeader.text = recipe.title
@@ -67,7 +66,8 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 setImageResource(R.drawable.ic_heart_empty)
                 setOnClickListener {
                     setImageResource(
-                        if (iconState) R.drawable.ic_heart_empty else R.drawable.ic_heart)
+                        if (iconState) R.drawable.ic_heart_empty else R.drawable.ic_heart
+                    )
                     iconState = !iconState
                 }
             }
