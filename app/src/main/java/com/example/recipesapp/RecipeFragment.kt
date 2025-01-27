@@ -1,5 +1,6 @@
 package com.example.recipesapp
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,11 @@ import com.example.recipesapp.entities.Recipe
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment(R.layout.fragment_recipe) {
+
+    companion object {
+        const val FAVORITES_PREFS = "favorites_prefs"
+        const val FAVORITES_SAVE_ID = "favorites_save_id"
+    }
 
     private var _recipeBinding: FragmentRecipeBinding? = null
     private val recipeBinding
@@ -57,22 +63,40 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 Log.d("!!!", "Image file not found ${recipe.imageUrl}")
                 null
             }
+        val favourites = getFavorites()
+        iconState = favourites.contains(recipe.id.toString())
+        setButtonByIconState()
         with(recipeBinding) {
             imgRecipeTitle.setImageDrawable(drawable)
             tvRecipeHeader.text = recipe.title
             tvPortions.text =
                 "${getString(R.string.recipe_portions_text)} ${sbSelectPortions.progress}"
+            btnAddToFavorites.setOnClickListener {
+                iconState = !iconState
+                setButtonByIconState()
+                changeFavoritesByIconState(recipe, favourites)
+            }
+        }
+    }
+
+    private fun setButtonByIconState() {
+        with(recipeBinding) {
             btnAddToFavorites.apply {
-                setImageResource(R.drawable.ic_heart_empty)
-                setOnClickListener {
-                    setImageResource(
-                        if (iconState) R.drawable.ic_heart_empty else R.drawable.ic_heart
-                    )
-                    iconState = !iconState
+                if (iconState) {
+                    setImageResource(R.drawable.ic_heart)
+                } else {
+                    setImageResource(R.drawable.ic_heart_empty)
                 }
             }
         }
     }
+
+    private fun changeFavoritesByIconState(recipe: Recipe, favorites: MutableSet<String>) {
+        if (iconState) favorites.add(recipe.id.toString())
+        else favorites.remove(recipe.id.toString())
+        saveFavorites(favorites)
+    }
+
 
     private fun initRecycler(recipe: Recipe) {
         val recyclerIngredients = IngredientsAdapter(recipe.ingredients)
@@ -110,6 +134,25 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
 
             })
         }
+    }
+
+    private fun saveFavorites(favouriteIds: Set<String>) {
+        val sharedPrefs = activity?.getSharedPreferences(
+            FAVORITES_PREFS, Context.MODE_PRIVATE
+        ) ?: return
+        with(sharedPrefs.edit()) {
+            putStringSet(FAVORITES_SAVE_ID, favouriteIds)
+            commit()
+        }
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val sharedPrefs = activity?.getSharedPreferences(
+            FAVORITES_PREFS, Context.MODE_PRIVATE
+        )
+        return HashSet(
+            sharedPrefs?.getStringSet(FAVORITES_SAVE_ID, setOf()) ?: setOf()
+        )
     }
 
 }
