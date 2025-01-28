@@ -50,7 +50,7 @@
             android:layout_marginStart="@dimen/margin_nav_button"
             android:layout_weight="1"
             android:backgroundTint="@color/btn_favorites"
-            android:text="@string/favorite_button"
+            android:text="@string/favorites_text"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"
             app:iconSize="@dimen/ic_favorites_size" />

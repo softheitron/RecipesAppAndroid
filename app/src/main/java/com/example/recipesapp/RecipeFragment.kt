@@ -28,6 +28,12 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         get() = _recipeBinding
             ?: throw IllegalStateException("Recipes List Binding, must not be null")
     private var iconState = false
+    private val sharedPrefs by lazy {
+        activity?.getSharedPreferences(
+            FAVORITES_PREFS,
+            Context.MODE_PRIVATE
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,22 +143,18 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     }
 
     private fun saveFavorites(favouriteIds: Set<String>) {
-        val sharedPrefs = activity?.getSharedPreferences(
-            FAVORITES_PREFS, Context.MODE_PRIVATE
-        ) ?: return
-        with(sharedPrefs.edit()) {
-            putStringSet(FAVORITES_SAVE_ID, favouriteIds)
-            commit()
-        }
+        sharedPrefs?.edit()
+            ?.putStringSet(FAVORITES_SAVE_ID, favouriteIds)
+            ?.apply()
     }
 
     private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = activity?.getSharedPreferences(
-            FAVORITES_PREFS, Context.MODE_PRIVATE
-        )
-        return HashSet(
-            sharedPrefs?.getStringSet(FAVORITES_SAVE_ID, setOf()) ?: setOf()
-        )
+        return HashSet(sharedPrefs?.getStringSet(FAVORITES_SAVE_ID, setOf()) ?: setOf())
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _recipeBinding = null
     }
 
 }
