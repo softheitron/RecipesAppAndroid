@@ -34,6 +34,7 @@ class FavoritesAdapter(private val dataSet: List<Recipe>) :
         val context = holder.itemView.context
         holder.titleText.text = recipe.title
         holder.itemCard.setOnClickListener { itemClickListener?.onItemClick(recipe.id) }
+        holder.itemCard.contentDescription = recipe.title
         val drawable =
             try {
                 Drawable.createFromStream(context.assets.open(recipe.imageUrl), null)
@@ -42,6 +43,7 @@ class FavoritesAdapter(private val dataSet: List<Recipe>) :
                 null
             }
         holder.recipeImage.setImageDrawable(drawable)
+
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

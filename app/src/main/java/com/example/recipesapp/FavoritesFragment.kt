@@ -20,6 +20,12 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     private val favoritesFragmentBinding
         get() = _favoritesFragmentBinding
             ?: throw IllegalStateException("Binding for FavoritesFragment must not be null")
+    private val sharedPrefs by lazy {
+        activity?.getSharedPreferences(
+            FAVORITES_PREFS,
+            Context.MODE_PRIVATE
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +44,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     }
 
     private fun initRecycler() {
-        val favorites = getFavorites().map { it.toInt() }.toSet()
+        val favorites = PreferencesUtils.getFavorites(sharedPrefs).map { it.toInt() }.toSet()
         if (favorites.isNotEmpty()) {
             val recyclerAdapter = FavoritesAdapter(STUB.getRecipesByIds(favorites))
             favoritesFragmentBinding.rvFavorites.adapter = recyclerAdapter
@@ -64,11 +70,6 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
             replace<RecipeFragment>(R.id.fragmentContainerView, args = bundle)
             addToBackStack(null)
         }
-    }
-
-    private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = activity?.getSharedPreferences(FAVORITES_PREFS, Context.MODE_PRIVATE)
-        return HashSet(sharedPrefs?.getStringSet(FAVORITES_SAVE_ID, setOf()) ?: setOf())
     }
 
     override fun onDestroyView() {

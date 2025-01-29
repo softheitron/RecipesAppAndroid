@@ -69,7 +69,7 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 Log.d("!!!", "Image file not found ${recipe.imageUrl}")
                 null
             }
-        val favourites = getFavorites()
+        val favourites = PreferencesUtils.getFavorites(sharedPrefs)
         iconState = favourites.contains(recipe.id.toString())
         setButtonByIconState()
         with(recipeBinding) {
@@ -146,10 +146,6 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         sharedPrefs?.edit()
             ?.putStringSet(FAVORITES_SAVE_ID, favouriteIds)
             ?.apply()
-    }
-
-    private fun getFavorites(): MutableSet<String> {
-        return HashSet(sharedPrefs?.getStringSet(FAVORITES_SAVE_ID, setOf()) ?: setOf())
     }
 
     override fun onDestroyView() {
