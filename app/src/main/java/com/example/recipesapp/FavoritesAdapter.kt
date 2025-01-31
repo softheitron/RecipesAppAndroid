@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesapp.databinding.ItemRecipeBinding
 import com.example.recipesapp.entities.Recipe
 
-class RecipesListAdapter(private val dataSet: List<Recipe>) :
-    RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
+class FavoritesAdapter(private val dataSet: List<Recipe>) :
+    RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
     private var itemClickListener: OnItemClickListener? = null
 
@@ -43,6 +43,7 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
                 null
             }
         holder.recipeImage.setImageDrawable(drawable)
+
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

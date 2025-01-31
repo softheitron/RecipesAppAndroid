@@ -37,7 +37,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         holder.titleText.text = category.title
         holder.descriptionText.text = category.description
         holder.cardItem.setOnClickListener { itemClickListener?.onItemClick(category.id) }
-
+        holder.cardItem.contentDescription = category.title
         val drawable =
             try {
                 Drawable.createFromStream(context.assets.open(category.imageUrl), null)

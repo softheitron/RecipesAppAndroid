@@ -243,4 +243,8 @@ object STUB {
 
     fun getRecipesByCategoryId(categoryId: Int?) = if (categoryId == 0) burgerRecipes else listOf()
 
+    fun getRecipesByIds(favoritesIds: Set<Int>) =
+        if (favoritesIds.isNotEmpty()) burgerRecipes.filter { favoritesIds.contains(it.id) }
+        else listOf()
+
 }
