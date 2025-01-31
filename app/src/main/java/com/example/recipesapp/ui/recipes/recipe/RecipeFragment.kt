@@ -11,12 +11,16 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.recipesapp.utils.PreferencesUtils
 import com.example.recipesapp.R
-import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.example.recipesapp.model.Recipe
+import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment
+import com.example.recipesapp.utils.PreferencesUtils
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment(R.layout.fragment_recipe) {
@@ -38,6 +42,8 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         )
     }
 
+    private val recipeVM: RecipeViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,6 +63,12 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         } else {
             args.getParcelable(RecipesListFragment.ARG_RECIPE)
         }
+
+        val recipeObserver = Observer<RecipeState> {
+            Log.i("!!!", "${it.iconState}")
+        }
+
+        recipeVM.recipeUiState.observe(viewLifecycleOwner, recipeObserver)
 
         recipe?.let {
             initUi(it)
