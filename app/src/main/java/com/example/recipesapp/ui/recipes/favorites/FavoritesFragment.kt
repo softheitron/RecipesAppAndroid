@@ -1,4 +1,4 @@
-package com.example.recipesapp
+package com.example.recipesapp.ui.recipes.favorites
 
 import android.content.Context
 import android.os.Bundle
@@ -9,9 +9,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.recipesapp.RecipeFragment.Companion.FAVORITES_PREFS
-import com.example.recipesapp.RecipeFragment.Companion.FAVORITES_SAVE_ID
-import com.example.recipesapp.RecipesListFragment.Companion.ARG_RECIPE
+import com.example.recipesapp.utils.OnItemClickListener
+import com.example.recipesapp.utils.PreferencesUtils
+import com.example.recipesapp.R
+import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
+import com.example.recipesapp.ui.recipes.recipe.RecipeFragment.Companion.FAVORITES_PREFS
+import com.example.recipesapp.ui.recipes.recipe_list.RecipesListAdapter
+import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment.Companion.ARG_RECIPE
+import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
@@ -46,7 +51,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     private fun initRecycler() {
         val favorites = PreferencesUtils.getFavorites(sharedPrefs).map { it.toInt() }.toSet()
         if (favorites.isNotEmpty()) {
-            val recyclerAdapter = FavoritesAdapter(STUB.getRecipesByIds(favorites))
+            val recyclerAdapter = RecipesListAdapter(STUB.getRecipesByIds(favorites))
             favoritesFragmentBinding.rvFavorites.adapter = recyclerAdapter
             recyclerAdapter.setOnItemClickListener(object : OnItemClickListener {
                 override fun onItemClick(itemId: Int) {

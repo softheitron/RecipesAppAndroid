@@ -1,7 +1,7 @@
-package com.example.recipesapp
+package com.example.recipesapp.utils
 
 import android.content.SharedPreferences
-import com.example.recipesapp.RecipeFragment.Companion.FAVORITES_SAVE_ID
+import com.example.recipesapp.ui.recipes.recipe.RecipeFragment.Companion.FAVORITES_SAVE_ID
 
 object PreferencesUtils {
     fun getFavorites(sharedPrefs: SharedPreferences?): MutableSet<String> {
