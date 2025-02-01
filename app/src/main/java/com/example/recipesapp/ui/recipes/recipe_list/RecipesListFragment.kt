@@ -1,4 +1,4 @@
-package com.example.recipesapp
+package com.example.recipesapp.ui.recipes.recipe_list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.recipesapp.CategoriesListFragment.Companion.ARG_CATEGORY_ID
-import com.example.recipesapp.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
-import com.example.recipesapp.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
+import com.example.recipesapp.utils.OnItemClickListener
+import com.example.recipesapp.R
+import com.example.recipesapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
+import com.example.recipesapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
+import com.example.recipesapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
+import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentListRecipesBinding
+import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
 
 class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
 
