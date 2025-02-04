@@ -85,8 +85,8 @@
             android:max="5"
             android:min="1"
             android:paddingStart="@dimen/margin_quarter"
-            android:paddingEnd="@dimen/margin_zero"
-            android:progress="1" />
+            android:paddingEnd="@dimen/margin_quarter"
+            android:progress="5" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"

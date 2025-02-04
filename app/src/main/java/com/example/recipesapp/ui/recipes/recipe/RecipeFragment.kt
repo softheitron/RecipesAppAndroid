@@ -12,15 +12,12 @@ import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
+import androidx.lifecycle.AndroidViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipesapp.R
+import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentRecipeBinding
-import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment
-import com.example.recipesapp.utils.PreferencesUtils
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment(R.layout.fragment_recipe) {
@@ -34,13 +31,6 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     private val recipeBinding
         get() = _recipeBinding
             ?: throw IllegalStateException("Recipes List Binding, must not be null")
-    private var iconState = false
-    private val sharedPrefs by lazy {
-        activity?.getSharedPreferences(
-            FAVORITES_PREFS,
-            Context.MODE_PRIVATE
-        )
-    }
 
     private val recipeVM: RecipeViewModel by viewModels()
 
@@ -58,49 +48,41 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val args = requireArguments()
-        val recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            args.getParcelable(RecipesListFragment.ARG_RECIPE, Recipe::class.java)
-        } else {
-            args.getParcelable(RecipesListFragment.ARG_RECIPE)
-        }
-
-        val recipeObserver = Observer<RecipeState> {
-            Log.i("!!!", "${it.iconState}")
-        }
-
-        recipeVM.recipeUiState.observe(viewLifecycleOwner, recipeObserver)
-
-        recipe?.let {
-            initUi(it)
-            initRecycler(it)
-        }
+        val recipeId = args.getInt(RecipesListFragment.ARG_RECIPE)
+        initUi(recipeId)
+        initRecycler(recipeId)
     }
 
-    private fun initUi(recipe: Recipe) {
-        val drawable =
-            try {
-                Drawable.createFromStream(requireContext().assets.open(recipe.imageUrl), null)
-            } catch (e: Exception) {
-                Log.d("!!!", "Image file not found ${recipe.imageUrl}")
-                null
-            }
-        val favourites = PreferencesUtils.getFavorites(sharedPrefs)
-        iconState = favourites.contains(recipe.id.toString())
-        setButtonByIconState()
-        with(recipeBinding) {
-            imgRecipeTitle.setImageDrawable(drawable)
-            tvRecipeHeader.text = recipe.title
-            tvPortions.text =
-                "${getString(R.string.recipe_portions_text)} ${sbSelectPortions.progress}"
-            btnAddToFavorites.setOnClickListener {
-                iconState = !iconState
-                setButtonByIconState()
-                changeFavoritesByIconState(recipe, favourites)
+    private fun initUi(recipeId: Int) {
+        recipeVM.loadRecipe(recipeId)
+        recipeVM.recipeUiState.observe(viewLifecycleOwner) { state ->
+            val drawable =
+                try {
+                    Drawable.createFromStream(state.recipe?.let { recipe ->
+                        requireContext().assets.open(
+                            recipe.imageUrl)
+                    }, null)
+                } catch (e: Exception) {
+                    Log.d("!!!", "Image file not found ${state.recipe?.imageUrl}")
+                    null
+                }
+            setButtonByIconState(state.iconState)
+            with(recipeBinding) {
+                imgRecipeTitle.setImageDrawable(drawable)
+                tvRecipeHeader.text = state.recipe?.title
+                tvPortions.text =
+                    "${getString(R.string.recipe_portions_text)} ${sbSelectPortions.progress}"
+                btnAddToFavorites.setOnClickListener {
+                    Log.d("!!!", "Favorites BUTTON Clicked")
+                    setButtonByIconState(state.iconState)
+                    recipeVM.onFavoritesClicked()
+                }
             }
         }
+
     }
 
-    private fun setButtonByIconState() {
+    private fun setButtonByIconState(iconState: Boolean) {
         with(recipeBinding) {
             btnAddToFavorites.apply {
                 if (iconState) {
@@ -112,55 +94,45 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         }
     }
 
-    private fun changeFavoritesByIconState(recipe: Recipe, favorites: MutableSet<String>) {
-        if (iconState) favorites.add(recipe.id.toString())
-        else favorites.remove(recipe.id.toString())
-        saveFavorites(favorites)
-    }
-
-
-    private fun initRecycler(recipe: Recipe) {
-        val recyclerIngredients = IngredientsAdapter(recipe.ingredients)
-        val recyclerMethod = MethodAdapter(recipe.method)
-        val divider = MaterialDividerItemDecoration(
-            requireContext(),
-            LinearLayoutManager.VERTICAL
-        ).apply {
-            dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
-            dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-            isLastItemDecorated = false
-        }
-        with(recipeBinding) {
-            rvIngredients.apply {
-                adapter = recyclerIngredients
-                addItemDecoration(divider)
+    private fun initRecycler(recipeId: Int) {
+        val recipe = STUB.getRecipeById(recipeId)
+        if (recipe != null) {
+            val recyclerIngredients = IngredientsAdapter(recipe.ingredients)
+            val recyclerMethod = MethodAdapter(recipe.method)
+            val divider = MaterialDividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            ).apply {
+                dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+                dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+                isLastItemDecorated = false
             }
-            rvMethod.apply {
-                adapter = recyclerMethod
-                addItemDecoration(divider)
-            }
-            sbSelectPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean
-                ) {
-                    recyclerIngredients.updateIngredients(progress)
-                    tvPortions.text = "${getString(R.string.recipe_portions_text)} $progress"
+            with(recipeBinding) {
+                rvIngredients.apply {
+                    adapter = recyclerIngredients
+                    addItemDecoration(divider)
                 }
+                rvMethod.apply {
+                    adapter = recyclerMethod
+                    addItemDecoration(divider)
+                }
+                sbSelectPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(
+                        seekBar: SeekBar?,
+                        progress: Int,
+                        fromUser: Boolean
+                    ) {
+                        recyclerIngredients.updateIngredients(progress)
+                        tvPortions.text = "${getString(R.string.recipe_portions_text)} $progress"
+                    }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+                    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 
-            })
+                })
+            }
         }
-    }
-
-    private fun saveFavorites(favouriteIds: Set<String>) {
-        sharedPrefs?.edit()
-            ?.putStringSet(FAVORITES_SAVE_ID, favouriteIds)
-            ?.apply()
     }
 
     override fun onDestroyView() {

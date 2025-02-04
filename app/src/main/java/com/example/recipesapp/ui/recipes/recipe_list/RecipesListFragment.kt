@@ -8,14 +8,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.recipesapp.utils.OnItemClickListener
 import com.example.recipesapp.R
+import com.example.recipesapp.data.STUB
+import com.example.recipesapp.databinding.FragmentListRecipesBinding
 import com.example.recipesapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
 import com.example.recipesapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_IMAGE_URL
 import com.example.recipesapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_NAME
-import com.example.recipesapp.data.STUB
-import com.example.recipesapp.databinding.FragmentListRecipesBinding
 import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
+import com.example.recipesapp.utils.OnItemClickListener
 
 class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
 
@@ -63,8 +63,7 @@ class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
-        val bundle = bundleOf(ARG_RECIPE to recipe)
+        val bundle = bundleOf(ARG_RECIPE to recipeId)
 
         parentFragmentManager.commit {
             setReorderingAllowed(true)
