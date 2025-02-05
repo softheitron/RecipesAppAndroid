@@ -1,8 +1,6 @@
 package com.example.recipesapp.ui.recipes.recipe
 
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +10,6 @@ import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.AndroidViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipesapp.R
 import com.example.recipesapp.data.STUB
@@ -60,37 +57,26 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 try {
                     Drawable.createFromStream(state.recipe?.let { recipe ->
                         requireContext().assets.open(
-                            recipe.imageUrl)
+                            recipe.imageUrl
+                        )
                     }, null)
                 } catch (e: Exception) {
                     Log.d("!!!", "Image file not found ${state.recipe?.imageUrl}")
                     null
                 }
-            setButtonByIconState(state.iconState)
             with(recipeBinding) {
                 imgRecipeTitle.setImageDrawable(drawable)
                 tvRecipeHeader.text = state.recipe?.title
                 tvPortions.text =
                     "${getString(R.string.recipe_portions_text)} ${sbSelectPortions.progress}"
-                btnAddToFavorites.setOnClickListener {
-                    Log.d("!!!", "Favorites BUTTON Clicked")
-                    setButtonByIconState(state.iconState)
-                    recipeVM.onFavoritesClicked()
-                }
+                btnAddToFavorites.setImageResource(
+                    if (state.iconState) R.drawable.ic_heart
+                    else R.drawable.ic_heart_empty
+                )
             }
         }
-
-    }
-
-    private fun setButtonByIconState(iconState: Boolean) {
-        with(recipeBinding) {
-            btnAddToFavorites.apply {
-                if (iconState) {
-                    setImageResource(R.drawable.ic_heart)
-                } else {
-                    setImageResource(R.drawable.ic_heart_empty)
-                }
-            }
+        recipeBinding.btnAddToFavorites.setOnClickListener {
+            recipeVM.onFavoritesClicked()
         }
     }
 
@@ -116,7 +102,8 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                     adapter = recyclerMethod
                     addItemDecoration(divider)
                 }
-                sbSelectPortions.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                sbSelectPortions.setOnSeekBarChangeListener(object :
+                    SeekBar.OnSeekBarChangeListener {
                     override fun onProgressChanged(
                         seekBar: SeekBar?,
                         progress: Int,
