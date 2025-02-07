@@ -4,7 +4,6 @@
     <dimen name="margin_main">16dp</dimen>
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_quarter">4dp</dimen>
-    <dimen name="margin_zero">0dp</dimen>
     <dimen name="margin_recipe_rv">12dp</dimen>
     <dimen name="margin_nav_button">2dp</dimen>
     <dimen name="divider_thickness">1dp</dimen>

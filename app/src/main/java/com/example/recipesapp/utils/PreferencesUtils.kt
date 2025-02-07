@@ -7,4 +7,9 @@ object PreferencesUtils {
     fun getFavorites(sharedPrefs: SharedPreferences?): MutableSet<String> {
         return HashSet(sharedPrefs?.getStringSet(FAVORITES_SAVE_ID, setOf()) ?: setOf())
     }
+    fun saveFavorites(sharedPrefs: SharedPreferences?, favouriteIds: Set<String>) {
+        sharedPrefs?.edit()
+            ?.putStringSet(FAVORITES_SAVE_ID, favouriteIds)
+            ?.apply()
+    }
 }
