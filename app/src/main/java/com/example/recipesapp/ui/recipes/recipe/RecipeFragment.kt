@@ -1,8 +1,6 @@
 package com.example.recipesapp.ui.recipes.recipe
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,22 +51,11 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     private fun initUi(recipeId: Int) {
         recipeVM.loadRecipe(recipeId)
         recipeVM.recipeUiState.observe(viewLifecycleOwner) { state ->
-            val drawable =
-                try {
-                    Drawable.createFromStream(state.recipe?.let { recipe ->
-                        requireContext().assets.open(
-                            recipe.imageUrl
-                        )
-                    }, null)
-                } catch (e: Exception) {
-                    Log.d("!!!", "Image file not found ${state.recipe?.imageUrl}")
-                    null
-                }
             with(recipeBinding) {
-                imgRecipeTitle.setImageDrawable(drawable)
+                imgRecipeTitle.setImageDrawable(state.recipeImage)
                 tvRecipeHeader.text = state.recipe?.title
                 tvPortions.text =
-                    "${getString(R.string.recipe_portions_text)} ${sbSelectPortions.progress}"
+                    "${getString(R.string.recipe_portions_text)} ${state.portionsAmount}"
                 btnAddToFavorites.setImageResource(
                     if (state.iconState) R.drawable.ic_heart
                     else R.drawable.ic_heart_empty
