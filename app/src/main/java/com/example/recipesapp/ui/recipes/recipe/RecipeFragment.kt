@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipesapp.R
-import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -28,6 +27,8 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
             ?: throw IllegalStateException("Recipes List Binding, must not be null")
 
     private val recipeVM: RecipeViewModel by viewModels()
+    private lateinit var recyclerIngredients: IngredientsAdapter
+    private lateinit var recyclerMethod: MethodAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,18 +45,27 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         super.onViewCreated(view, savedInstanceState)
         val args = requireArguments()
         val recipeId = args.getInt(RecipesListFragment.ARG_RECIPE)
+        recyclerIngredients = IngredientsAdapter(mutableListOf())
+        recyclerMethod = MethodAdapter(mutableListOf())
         initUi(recipeId)
-        initRecycler(recipeId)
     }
 
     private fun initUi(recipeId: Int) {
         recipeVM.loadRecipe(recipeId)
+        applySeekBar()
+        initRecycler()
         recipeVM.recipeUiState.observe(viewLifecycleOwner) { state ->
+            val recipe = state.recipe
             with(recipeBinding) {
-                imgRecipeTitle.setImageDrawable(state.recipeImage)
-                tvRecipeHeader.text = state.recipe?.title
+                if (recipe != null) {
+                    recyclerIngredients.setIngredients(recipe.ingredients)
+                    recyclerMethod.setMethod(recipe.method)
+                    recyclerIngredients.updateIngredients(state.portionsAmount)
+                }
                 tvPortions.text =
                     "${getString(R.string.recipe_portions_text)} ${state.portionsAmount}"
+                imgRecipeTitle.setImageDrawable(state.recipeImage)
+                tvRecipeHeader.text = state.recipe?.title
                 btnAddToFavorites.setImageResource(
                     if (state.iconState) R.drawable.ic_heart
                     else R.drawable.ic_heart_empty
@@ -67,46 +77,40 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         }
     }
 
-    private fun initRecycler(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
-        if (recipe != null) {
-            val recyclerIngredients = IngredientsAdapter(recipe.ingredients)
-            val recyclerMethod = MethodAdapter(recipe.method)
-            val divider = MaterialDividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL
-            ).apply {
-                dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
-                dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-                isLastItemDecorated = false
-            }
-            with(recipeBinding) {
-                rvIngredients.apply {
-                    adapter = recyclerIngredients
-                    addItemDecoration(divider)
-                }
-                rvMethod.apply {
-                    adapter = recyclerMethod
-                    addItemDecoration(divider)
-                }
-                sbSelectPortions.setOnSeekBarChangeListener(object :
-                    SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(
-                        seekBar: SeekBar?,
-                        progress: Int,
-                        fromUser: Boolean
-                    ) {
-                        recyclerIngredients.updateIngredients(progress)
-                        tvPortions.text = "${getString(R.string.recipe_portions_text)} $progress"
-                    }
-
-                    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-
-                })
-            }
+    private fun initRecycler() {
+        val divider = MaterialDividerItemDecoration(
+            requireContext(),
+            LinearLayoutManager.VERTICAL
+        ).apply {
+            dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+            dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+            isLastItemDecorated = false
         }
+        with(recipeBinding) {
+            rvIngredients.adapter = recyclerIngredients
+            rvIngredients.addItemDecoration(divider)
+
+            rvMethod.adapter = recyclerMethod
+            rvMethod.addItemDecoration(divider)
+        }
+    }
+
+    private fun applySeekBar() {
+        recipeBinding.sbSelectPortions.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                recipeVM.updatePortionsAmount(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+        })
     }
 
     override fun onDestroyView() {

@@ -12,7 +12,7 @@ import com.example.recipesapp.utils.PreferencesUtils
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _recipeUiState = MutableLiveData<RecipeState>()
+    private val _recipeUiState = MutableLiveData(RecipeState())
     val recipeUiState: LiveData<RecipeState> get() = _recipeUiState
     private val sharedPrefs =
         application.getSharedPreferences(RecipeFragment.FAVORITES_PREFS, Application.MODE_PRIVATE)
@@ -27,15 +27,18 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 Drawable.createFromStream(
                     recipe?.let {
                         getApplication<Application>().assets.open(
-                            it.imageUrl)
-                    }, null)
+                            it.imageUrl
+                        )
+                    }, null
+                )
             } catch (e: Exception) {
                 Log.d(
                     "!!!",
-                    "Image file not found ${_recipeUiState.value?.recipe?.imageUrl}")
+                    "Image file not found ${_recipeUiState.value?.recipe?.imageUrl}"
+                )
                 null
             }
-        _recipeUiState.value = RecipeState(
+        _recipeUiState.value = _recipeUiState.value?.copy(
             recipe = recipe,
             iconState = iconState,
             portionsAmount = portionsAmount ?: 1,
@@ -53,6 +56,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             else favorites.remove(recipeId)
             PreferencesUtils.saveFavorites(sharedPrefs, favorites)
         }
+    }
+
+    fun updatePortionsAmount(portionsAmount: Int) {
+        _recipeUiState.value = _recipeUiState.value?.copy(portionsAmount = portionsAmount)
     }
 
 }
