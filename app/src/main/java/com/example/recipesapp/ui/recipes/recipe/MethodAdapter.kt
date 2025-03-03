@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private val dataSet: MutableList<String>) :
+class MethodAdapter(private var dataSet: List<String> = emptyList()) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
     private val positionIncrement = 1
@@ -29,9 +29,8 @@ class MethodAdapter(private val dataSet: MutableList<String>) :
         holder.method.text = method
     }
 
-    fun setMethod(ingredients: List<String>) {
-        dataSet.clear()
-        dataSet.addAll(ingredients)
+    fun setMethod(methods: List<String>) {
+        dataSet = methods
         notifyDataSetChanged()
     }
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,8 +28,8 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
             ?: throw IllegalStateException("Recipes List Binding, must not be null")
 
     private val recipeVM: RecipeViewModel by viewModels()
-    private lateinit var recyclerIngredients: IngredientsAdapter
-    private lateinit var recyclerMethod: MethodAdapter
+    private val recyclerIngredients = IngredientsAdapter()
+    private val recyclerMethod = MethodAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +46,6 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         super.onViewCreated(view, savedInstanceState)
         val args = requireArguments()
         val recipeId = args.getInt(RecipesListFragment.ARG_RECIPE)
-        recyclerIngredients = IngredientsAdapter(mutableListOf())
-        recyclerMethod = MethodAdapter(mutableListOf())
         initUi(recipeId)
     }
 
@@ -96,21 +95,10 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     }
 
     private fun applySeekBar() {
-        recipeBinding.sbSelectPortions.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seekBar: SeekBar?,
-                progress: Int,
-                fromUser: Boolean
-            ) {
+        recipeBinding.sbSelectPortions.setOnSeekBarChangeListener(
+            PortionSeekBarListener { progress ->
                 recipeVM.updatePortionsAmount(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-
-        })
+            })
     }
 
     override fun onDestroyView() {
@@ -118,4 +106,13 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         _recipeBinding = null
     }
 
+    class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) : OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            onChangeIngredients(progress)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+    }
 }
