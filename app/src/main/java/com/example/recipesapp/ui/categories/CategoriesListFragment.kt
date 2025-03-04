@@ -8,11 +8,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.example.recipesapp.utils.OnItemClickListener
 import com.example.recipesapp.R
-import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment
 import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
+import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment
+import com.example.recipesapp.utils.OnItemClickListener
 
 class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
 
