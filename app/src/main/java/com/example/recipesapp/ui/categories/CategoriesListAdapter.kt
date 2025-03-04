@@ -5,13 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.recipesapp.utils.OnItemClickListener
 import com.example.recipesapp.databinding.ItemCategoryBinding
 import com.example.recipesapp.model.Category
+import com.example.recipesapp.utils.OnItemClickListener
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
-    RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
+    var categories: List<Category> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     private var itemClickListener: OnItemClickListener? = null
 
     class ViewHolder(binding: ItemCategoryBinding) :
@@ -33,7 +37,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val category = dataSet[position]
+        val category = categories[position]
         val context = holder.itemView.context
         holder.titleText.text = category.title
         holder.descriptionText.text = category.description
@@ -53,6 +57,6 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         itemClickListener = listener
     }
 
-    override fun getItemCount(): Int = dataSet.size
+    override fun getItemCount(): Int = categories.size
 
 }
