@@ -8,8 +8,14 @@ import com.example.recipesapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private var dataSet: List<Ingredient> = emptyList()) :
+class IngredientsAdapter :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
+
+    var ingredients: List<Ingredient> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     private var quantity = 1
 
@@ -30,7 +36,7 @@ class IngredientsAdapter(private var dataSet: List<Ingredient> = emptyList()) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val ingredient = dataSet[position]
+        val ingredient = ingredients[position]
         val multipliedValue = BigDecimal(ingredient.quantity) * BigDecimal(quantity)
         val ingredientsQuantity = multipliedValue
             .setScale(1, RoundingMode.HALF_UP)
@@ -46,12 +52,6 @@ class IngredientsAdapter(private var dataSet: List<Ingredient> = emptyList()) :
         notifyDataSetChanged()
     }
 
-    fun setIngredients(ingredients: List<Ingredient>) {
-        dataSet = ingredients
-        notifyDataSetChanged()
-    }
-
-
-    override fun getItemCount(): Int = dataSet.size
+    override fun getItemCount(): Int = ingredients.size
 
 }

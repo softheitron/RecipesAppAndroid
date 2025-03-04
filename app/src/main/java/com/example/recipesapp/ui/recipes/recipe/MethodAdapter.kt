@@ -5,8 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private var dataSet: List<String> = emptyList()) :
+class MethodAdapter :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
+
+    var method: List<String> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     private val positionIncrement = 1
 
@@ -25,15 +31,10 @@ class MethodAdapter(private var dataSet: List<String> = emptyList()) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val method = "${position + positionIncrement}. ${dataSet[position]}"
+        val method = "${position + positionIncrement}. ${method[position]}"
         holder.method.text = method
     }
 
-    fun setMethod(methods: List<String>) {
-        dataSet = methods
-        notifyDataSetChanged()
-    }
-
-    override fun getItemCount(): Int = dataSet.size
+    override fun getItemCount(): Int = method.size
 
 }
