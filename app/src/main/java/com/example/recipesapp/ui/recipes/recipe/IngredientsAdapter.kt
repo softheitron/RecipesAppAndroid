@@ -8,8 +8,14 @@ import com.example.recipesapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private val dataSet: MutableList<Ingredient>) :
+class IngredientsAdapter :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
+
+    var dataSet: List<Ingredient> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     private var quantity = 1
 
@@ -45,13 +51,6 @@ class IngredientsAdapter(private val dataSet: MutableList<Ingredient>) :
         quantity = progress
         notifyDataSetChanged()
     }
-
-    fun setIngredients(ingredients: List<Ingredient>) {
-        dataSet.clear()
-        dataSet.addAll(ingredients)
-        notifyDataSetChanged()
-    }
-
 
     override fun getItemCount(): Int = dataSet.size
 

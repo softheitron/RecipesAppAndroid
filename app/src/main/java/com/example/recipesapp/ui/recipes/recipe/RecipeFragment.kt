@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,8 +28,8 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
             ?: throw IllegalStateException("Recipes List Binding, must not be null")
 
     private val recipeVM: RecipeViewModel by viewModels()
-    private lateinit var recyclerIngredients: IngredientsAdapter
-    private lateinit var recyclerMethod: MethodAdapter
+    private val recyclerIngredients = IngredientsAdapter()
+    private val recyclerMethod = MethodAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,35 +46,16 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         super.onViewCreated(view, savedInstanceState)
         val args = requireArguments()
         val recipeId = args.getInt(RecipesListFragment.ARG_RECIPE)
-        recyclerIngredients = IngredientsAdapter(mutableListOf())
-        recyclerMethod = MethodAdapter(mutableListOf())
         initUi(recipeId)
     }
 
     private fun initUi(recipeId: Int) {
-        recipeVM.loadRecipe(recipeId)
-        applySeekBar()
         initRecycler()
+        applySeekBar()
+        addToFavorites()
+        recipeVM.loadRecipe(recipeId)
         recipeVM.recipeUiState.observe(viewLifecycleOwner) { state ->
-            val recipe = state.recipe
-            with(recipeBinding) {
-                if (recipe != null) {
-                    recyclerIngredients.setIngredients(recipe.ingredients)
-                    recyclerMethod.setMethod(recipe.method)
-                    recyclerIngredients.updateIngredients(state.portionsAmount)
-                }
-                tvPortions.text =
-                    "${getString(R.string.recipe_portions_text)} ${state.portionsAmount}"
-                imgRecipeTitle.setImageDrawable(state.recipeImage)
-                tvRecipeHeader.text = state.recipe?.title
-                btnAddToFavorites.setImageResource(
-                    if (state.iconState) R.drawable.ic_heart
-                    else R.drawable.ic_heart_empty
-                )
-            }
-        }
-        recipeBinding.btnAddToFavorites.setOnClickListener {
-            recipeVM.onFavoritesClicked()
+            updateUi(state)
         }
     }
 
@@ -95,22 +77,36 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         }
     }
 
-    private fun applySeekBar() {
-        recipeBinding.sbSelectPortions.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seekBar: SeekBar?,
-                progress: Int,
-                fromUser: Boolean
-            ) {
-                recipeVM.updatePortionsAmount(progress)
+    private fun updateUi(state: RecipeState) {
+        val recipe = state.recipe
+        with(recipeBinding) {
+            if (recipe != null) {
+                recyclerIngredients.dataSet = recipe.ingredients
+                recyclerMethod.dataSet = recipe.method
+                recyclerIngredients.updateIngredients(state.portionsAmount)
             }
+            tvPortions.text =
+                "${getString(R.string.recipe_portions_text)} ${state.portionsAmount}"
+            imgRecipeTitle.setImageDrawable(state.recipeImage)
+            tvRecipeHeader.text = state.recipe?.title
+            btnAddToFavorites.setImageResource(
+                if (state.iconState) R.drawable.ic_heart
+                else R.drawable.ic_heart_empty
+            )
+        }
+    }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+    private fun addToFavorites() {
+        recipeBinding.btnAddToFavorites.setOnClickListener {
+            recipeVM.onFavoritesClicked()
+        }
+    }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-
-        })
+    private fun applySeekBar() {
+        recipeBinding.sbSelectPortions.setOnSeekBarChangeListener(
+            PortionSeekBarListener { progress ->
+                recipeVM.updatePortionsAmount(progress)
+            })
     }
 
     override fun onDestroyView() {
@@ -118,4 +114,13 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         _recipeBinding = null
     }
 
+    class PortionSeekBarListener(val onChangeIngredients: (Int) -> Unit) : OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            onChangeIngredients(progress)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+    }
 }
