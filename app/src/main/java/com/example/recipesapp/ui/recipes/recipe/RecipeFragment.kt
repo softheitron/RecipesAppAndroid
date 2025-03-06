@@ -50,10 +50,13 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     }
 
     private fun initUi(recipeId: Int) {
-        recipeVM.loadRecipe(recipeId)
-        applySeekBar()
         initRecycler()
-        updateUi()
+        applySeekBar()
+        addToFavorites()
+        recipeVM.loadRecipe(recipeId)
+        recipeVM.recipeUiState.observe(viewLifecycleOwner) { state ->
+            updateUi(state)
+        }
     }
 
     private fun initRecycler() {
@@ -74,25 +77,26 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         }
     }
 
-    private fun updateUi() {
-        recipeVM.recipeUiState.observe(viewLifecycleOwner) { state ->
-            val recipe = state.recipe
-            with(recipeBinding) {
-                if (recipe != null) {
-                    recyclerIngredients.ingredients = recipe.ingredients
-                    recyclerMethod.method = recipe.method
-                    recyclerIngredients.updateIngredients(state.portionsAmount)
-                }
-                tvPortions.text =
-                    "${getString(R.string.recipe_portions_text)} ${state.portionsAmount}"
-                imgRecipeTitle.setImageDrawable(state.recipeImage)
-                tvRecipeHeader.text = state.recipe?.title
-                btnAddToFavorites.setImageResource(
-                    if (state.iconState) R.drawable.ic_heart
-                    else R.drawable.ic_heart_empty
-                )
+    private fun updateUi(state: RecipeState) {
+        val recipe = state.recipe
+        with(recipeBinding) {
+            if (recipe != null) {
+                recyclerIngredients.dataSet = recipe.ingredients
+                recyclerMethod.dataSet = recipe.method
+                recyclerIngredients.updateIngredients(state.portionsAmount)
             }
+            tvPortions.text =
+                "${getString(R.string.recipe_portions_text)} ${state.portionsAmount}"
+            imgRecipeTitle.setImageDrawable(state.recipeImage)
+            tvRecipeHeader.text = state.recipe?.title
+            btnAddToFavorites.setImageResource(
+                if (state.iconState) R.drawable.ic_heart
+                else R.drawable.ic_heart_empty
+            )
         }
+    }
+
+    private fun addToFavorites() {
         recipeBinding.btnAddToFavorites.setOnClickListener {
             recipeVM.onFavoritesClicked()
         }

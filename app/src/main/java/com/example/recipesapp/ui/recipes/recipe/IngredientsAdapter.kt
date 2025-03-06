@@ -11,7 +11,7 @@ import java.math.RoundingMode
 class IngredientsAdapter :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
-    var ingredients: List<Ingredient> = emptyList()
+    var dataSet: List<Ingredient> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -36,7 +36,7 @@ class IngredientsAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val ingredient = ingredients[position]
+        val ingredient = dataSet[position]
         val multipliedValue = BigDecimal(ingredient.quantity) * BigDecimal(quantity)
         val ingredientsQuantity = multipliedValue
             .setScale(1, RoundingMode.HALF_UP)
@@ -52,6 +52,6 @@ class IngredientsAdapter :
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = ingredients.size
+    override fun getItemCount(): Int = dataSet.size
 
 }

@@ -8,7 +8,7 @@ import com.example.recipesapp.databinding.ItemMethodBinding
 class MethodAdapter :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
-    var method: List<String> = emptyList()
+    var dataSet: List<String> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -31,10 +31,10 @@ class MethodAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val method = "${position + positionIncrement}. ${method[position]}"
+        val method = "${position + positionIncrement}. ${dataSet[position]}"
         holder.method.text = method
     }
 
-    override fun getItemCount(): Int = method.size
+    override fun getItemCount(): Int = dataSet.size
 
 }
