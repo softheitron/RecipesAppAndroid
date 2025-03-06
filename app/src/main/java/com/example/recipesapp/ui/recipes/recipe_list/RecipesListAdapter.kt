@@ -12,7 +12,7 @@ import com.example.recipesapp.utils.OnItemClickListener
 class RecipesListAdapter :
     RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
 
-    var recipes: List<Recipe> = emptyList()
+    var dataSet: List<Recipe> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -36,7 +36,7 @@ class RecipesListAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val recipe = recipes[position]
+        val recipe = dataSet[position]
         val context = holder.itemView.context
         holder.titleText.text = recipe.title
         holder.itemCard.setOnClickListener { itemClickListener?.onItemClick(recipe.id) }
@@ -55,6 +55,6 @@ class RecipesListAdapter :
         itemClickListener = listener
     }
 
-    override fun getItemCount(): Int = recipes.size
+    override fun getItemCount(): Int = dataSet.size
 
 }

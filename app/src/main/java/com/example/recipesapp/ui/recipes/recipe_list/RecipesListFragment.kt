@@ -47,18 +47,18 @@ class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
     }
 
     private fun initUI(categoryId: Int) {
-        recipesListVM.loadRecipesByCategoryId(categoryId)
         initRecycler()
-        updateUi()
+        recipesListVM.loadRecipesByCategoryId(categoryId)
+        recipesListVM.recipesListState.observe(viewLifecycleOwner) { state ->
+            updateUi(state)
+        }
     }
 
-    private fun updateUi() {
-        recipesListVM.recipesListState.observe(viewLifecycleOwner) { state ->
-            recipesListAdapter.recipes = state.recipeList
-            with(recipesListBinding) {
-                ivCategoryTitleImage.setImageDrawable(state.categoryImage)
-                tvCategoryTitle.text = state.category?.title
-            }
+    private fun updateUi(state: RecipesListViewModel.RecipesListState) {
+        recipesListAdapter.dataSet = state.recipeList
+        with(recipesListBinding) {
+            ivCategoryTitleImage.setImageDrawable(state.categoryImage)
+            tvCategoryTitle.text = state.category?.title
         }
     }
 
