@@ -14,10 +14,21 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     private val _recipesListState = MutableLiveData(RecipesListState())
     val recipesListState: LiveData<RecipesListState> get() = _recipesListState
+    private var currentState = _recipesListState.value ?: RecipesListState()
 
     fun loadRecipesByCategoryId(categoryId: Int) {
         val category = STUB.getCategories().get(categoryId)
         val recipeList = STUB.getRecipesByCategoryId(categoryId)
+        val categoryImage = getImageFromAssets(category)
+        currentState = currentState.copy(
+            recipeList = recipeList,
+            category = category,
+            categoryImage = categoryImage
+        )
+        _recipesListState.value = currentState
+    }
+
+    private fun getImageFromAssets(category: Category) : Drawable? {
         val categoryImage = try {
             Drawable.createFromStream(
                 getApplication<Application>().assets.open(
@@ -32,11 +43,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
             )
             null
         }
-        _recipesListState.value = _recipesListState.value?.copy(
-            recipeList = recipeList,
-            category = category,
-            categoryImage = categoryImage
-        )
+        return categoryImage
     }
 
     data class RecipesListState(

@@ -45,9 +45,15 @@ class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
     }
 
     private fun initUI() {
-        categoriesVM.loadCategories()
         initRecycler()
-        updateUI()
+        categoriesVM.loadCategories()
+        categoriesVM.categoriesState.observe(viewLifecycleOwner) { state ->
+            updateUI(state)
+        }
+    }
+
+    private fun updateUI(state: CategoriesListViewModel.CategoriesListState) {
+        categoriesListAdapter.dataSet = state.categoriesList
     }
 
     private fun initRecycler() {
@@ -57,12 +63,6 @@ class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
                 openRecipesByCategoryId(itemId)
             }
         })
-    }
-
-    private fun updateUI() {
-        categoriesVM.categoriesState.observe(viewLifecycleOwner) { categories ->
-                categoriesListAdapter.categories = categories
-        }
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {

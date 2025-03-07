@@ -8,12 +8,18 @@ import com.example.recipesapp.model.Category
 
 class CategoriesListViewModel : ViewModel() {
 
-    private val _categoriesState = MutableLiveData<List<Category>>()
-    val categoriesState: LiveData<List<Category>> get() = _categoriesState
+    private val _categoriesState = MutableLiveData(CategoriesListState())
+    val categoriesState: LiveData<CategoriesListState> get() = _categoriesState
+    private var currentState = _categoriesState.value ?: CategoriesListState()
 
     fun loadCategories() {
-        val categories = STUB.getCategories()
-        _categoriesState.value = categories
+        val categoriesList = STUB.getCategories()
+        currentState = currentState.copy(categoriesList = categoriesList)
+        _categoriesState.value = currentState
     }
+
+    data class CategoriesListState(
+        val categoriesList: List<Category> = emptyList()
+    )
 
 }

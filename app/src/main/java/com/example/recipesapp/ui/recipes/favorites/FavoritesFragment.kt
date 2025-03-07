@@ -11,7 +11,6 @@ import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.FragmentFavoritesBinding
-import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.example.recipesapp.ui.recipes.recipe_list.RecipesListAdapter
 import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment.Companion.ARG_RECIPE
@@ -46,15 +45,15 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     private fun initUI() {
         initRecycler()
         favoritesVM.loadRecipesByFavoritesIds()
-        favoritesVM.favoritesState.observe(viewLifecycleOwner) { recipes ->
-            updateUI(recipes)
+        favoritesVM.favoritesState.observe(viewLifecycleOwner) { state ->
+            updateUI(state)
         }
     }
 
-    private fun updateUI(recipes: List<Recipe>) {
+    private fun updateUI(state: FavoritesViewModel.FavoritesState) {
         with(favoritesFragmentBinding) {
-            if (recipes.isNotEmpty()) {
-                recyclerAdapter.dataSet = recipes
+            if (state.recipeList.isNotEmpty()) {
+                recyclerAdapter.dataSet = state.recipeList
             } else {
                 rvFavorites.visibility = View.GONE
                 tvFavoritesEmpty.visibility = View.VISIBLE

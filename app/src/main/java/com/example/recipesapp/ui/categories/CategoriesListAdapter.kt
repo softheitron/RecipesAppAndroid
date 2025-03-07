@@ -11,7 +11,7 @@ import com.example.recipesapp.utils.OnItemClickListener
 
 class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
-    var categories: List<Category> = emptyList()
+    var dataSet: List<Category> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -37,7 +37,7 @@ class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHol
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val category = categories[position]
+        val category = dataSet[position]
         val context = holder.itemView.context
         holder.titleText.text = category.title
         holder.descriptionText.text = category.description
@@ -57,6 +57,6 @@ class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHol
         itemClickListener = listener
     }
 
-    override fun getItemCount(): Int = categories.size
+    override fun getItemCount(): Int = dataSet.size
 
 }

@@ -11,15 +11,21 @@ import com.example.recipesapp.utils.PreferencesUtils
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _favoritesState = MutableLiveData<List<Recipe>>()
-    val favoritesState: LiveData<List<Recipe>> get() = _favoritesState
+    private val _favoritesState = MutableLiveData(FavoritesState())
+    val favoritesState: LiveData<FavoritesState> get() = _favoritesState
+    private var currentState = _favoritesState.value ?: FavoritesState()
     private val sharedPrefs =
         application.getSharedPreferences(RecipeFragment.FAVORITES_PREFS, Application.MODE_PRIVATE)
 
     fun loadRecipesByFavoritesIds() {
         val favoritesIds = PreferencesUtils.getFavorites(sharedPrefs).map { it.toInt() }.toSet()
         val recipeList = STUB.getRecipesByIds(favoritesIds)
-        _favoritesState.value = recipeList
+        currentState = currentState.copy(recipeList = recipeList)
+        _favoritesState.value = currentState
     }
+
+    data class FavoritesState(
+        val recipeList: List<Recipe> = emptyList()
+    )
 
 }
