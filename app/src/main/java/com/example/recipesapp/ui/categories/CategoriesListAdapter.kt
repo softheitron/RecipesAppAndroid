@@ -5,13 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.recipesapp.utils.OnItemClickListener
 import com.example.recipesapp.databinding.ItemCategoryBinding
 import com.example.recipesapp.model.Category
+import com.example.recipesapp.utils.OnItemClickListener
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
-    RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+class CategoriesListAdapter : RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
+    var dataSet: List<Category> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     private var itemClickListener: OnItemClickListener? = null
 
     class ViewHolder(binding: ItemCategoryBinding) :

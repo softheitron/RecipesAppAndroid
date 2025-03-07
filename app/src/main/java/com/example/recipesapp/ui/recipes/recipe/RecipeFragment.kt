@@ -77,7 +77,7 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         }
     }
 
-    private fun updateUi(state: RecipeState) {
+    private fun updateUi(state: RecipeViewModel.RecipeState) {
         val recipe = state.recipe
         with(recipeBinding) {
             if (recipe != null) {
