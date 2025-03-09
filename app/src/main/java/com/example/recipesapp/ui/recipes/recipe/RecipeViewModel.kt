@@ -14,6 +14,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     private val _recipeUiState = MutableLiveData(RecipeState())
     val recipeUiState: LiveData<RecipeState> get() = _recipeUiState
+    private var currentState = _recipeUiState.value ?: RecipeState()
     private val sharedPrefs =
         application.getSharedPreferences(RecipeFragment.FAVORITES_PREFS, Application.MODE_PRIVATE)
 
@@ -22,28 +23,33 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             .contains(recipeId.toString())
         val recipe = STUB.getRecipeById(recipeId)
         val portionsAmount = _recipeUiState.value?.portionsAmount
-        val recipeImage =
-            try {
-                Drawable.createFromStream(
-                    recipe?.let {
-                        getApplication<Application>().assets.open(
-                            it.imageUrl
-                        )
-                    }, null
-                )
-            } catch (e: Exception) {
-                Log.d(
-                    "!!!",
-                    "Image file not found ${_recipeUiState.value?.recipe?.imageUrl}"
-                )
-                null
-            }
-        _recipeUiState.value = _recipeUiState.value?.copy(
+        val recipeImage = getImageFromAssets(recipe)
+        currentState = currentState.copy(
             recipe = recipe,
             iconState = iconState,
             portionsAmount = portionsAmount ?: 1,
             recipeImage = recipeImage
         )
+        _recipeUiState.value = currentState
+    }
+
+    private fun getImageFromAssets(recipe: Recipe?): Drawable? {
+        val categoryImage = try {
+            Drawable.createFromStream(
+                recipe?.let {
+                    getApplication<Application>().assets.open(
+                        it.imageUrl
+                    )
+                }, null
+            )
+        } catch (e: Exception) {
+            Log.d(
+                "!!!",
+                "Image file not found ${_recipeUiState.value?.recipe?.imageUrl}"
+            )
+            null
+        }
+        return categoryImage
     }
 
     fun onFavoritesClicked() {
@@ -62,11 +68,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         _recipeUiState.value = _recipeUiState.value?.copy(portionsAmount = portionsAmount)
     }
 
-}
+    data class RecipeState(
+        val recipe: Recipe? = null,
+        val iconState: Boolean = false,
+        val portionsAmount: Int = 1,
+        val recipeImage: Drawable? = null,
+    )
 
-data class RecipeState(
-    val recipe: Recipe? = null,
-    val iconState: Boolean = false,
-    val portionsAmount: Int = 1,
-    val recipeImage: Drawable? = null,
-)
+}
