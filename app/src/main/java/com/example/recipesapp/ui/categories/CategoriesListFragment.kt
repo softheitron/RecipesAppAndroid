@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
-import com.example.recipesapp.ui.recipes.recipe_list.RecipesListFragment
 import com.example.recipesapp.utils.OnItemClickListener
 
 class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
@@ -69,11 +67,7 @@ class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
         val bundle = bundleOf(
             ARG_CATEGORY_ID to categoryId,
         )
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace<RecipesListFragment>(R.id.fragmentContainerView, args = bundle)
-            addToBackStack(null)
-        }
+        findNavController().navigate(R.id.recipesListFragment, bundle)
     }
 
     override fun onDestroyView() {
