@@ -2,13 +2,9 @@ package com.example.recipesapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
+import androidx.navigation.findNavController
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.ActivityMainBinding
-import com.example.recipesapp.ui.categories.CategoriesListFragment
-import com.example.recipesapp.ui.recipes.favorites.FavoritesFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,26 +17,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add<CategoriesListFragment>(R.id.fragmentContainerView)
-            }
-        }
         with(binding) {
             btnFavorites.setOnClickListener {
-                supportFragmentManager.commit {
-                    setReorderingAllowed(true)
-                    replace<FavoritesFragment>(R.id.fragmentContainerView)
-                    addToBackStack(null)
-                }
+                findNavController(R.id.fragmentContainerView)
+                    .navigate(R.id.favoritesFragment)
             }
             btnCategories.setOnClickListener {
-                supportFragmentManager.commit {
-                    setReorderingAllowed(true)
-                    replace<CategoriesListFragment>(R.id.fragmentContainerView)
-                    addToBackStack(null)
-                }
+                findNavController(R.id.fragmentContainerView)
+                    .navigate(R.id.categoriesListFragment)
             }
         }
     }
