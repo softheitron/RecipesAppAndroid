@@ -28,7 +28,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         _recipesListState.value = currentState
     }
 
-    private fun getImageFromAssets(category: Category) : Drawable? {
+    private fun getImageFromAssets(category: Category): Drawable? {
         val categoryImage = try {
             Drawable.createFromStream(
                 getApplication<Application>().assets.open(
