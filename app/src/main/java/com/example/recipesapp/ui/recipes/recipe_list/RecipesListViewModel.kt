@@ -16,9 +16,8 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     val recipesListState: LiveData<RecipesListState> get() = _recipesListState
     private var currentState = _recipesListState.value ?: RecipesListState()
 
-    fun loadRecipesByCategoryId(categoryId: Int) {
-        val category = STUB.getCategories().get(categoryId)
-        val recipeList = STUB.getRecipesByCategoryId(categoryId)
+    fun loadRecipesByCategoryId(category: Category) {
+        val recipeList = STUB.getRecipesByCategoryId(category.id)
         val categoryImage = getImageFromAssets(category)
         currentState = currentState.copy(
             recipeList = recipeList,

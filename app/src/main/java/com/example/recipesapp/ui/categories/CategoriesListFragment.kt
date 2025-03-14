@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,10 +12,6 @@ import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 import com.example.recipesapp.utils.OnItemClickListener
 
 class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
-
-    companion object {
-        const val ARG_CATEGORY_ID = "arg_category_id"
-    }
 
     private var _categoriesListBinding: FragmentListCategoriesBinding? = null
     private val categoriesListBinding
@@ -64,10 +59,13 @@ class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val bundle = bundleOf(
-            ARG_CATEGORY_ID to categoryId,
-        )
-        findNavController().navigate(R.id.recipesListFragment, bundle)
+        val category =
+            categoriesVM.categoriesState.value?.categoriesList?.find { it.id == categoryId }
+        category?.let {
+            val action = CategoriesListFragmentDirections
+                .actionCategoriesListFragmentToRecipesListFragment(it)
+            findNavController().navigate(action)
+        } ?: throw IllegalArgumentException("Category must not be null!")
     }
 
     override fun onDestroyView() {

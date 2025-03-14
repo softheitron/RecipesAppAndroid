@@ -7,16 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.FragmentListRecipesBinding
-import com.example.recipesapp.ui.categories.CategoriesListFragment.Companion.ARG_CATEGORY_ID
+import com.example.recipesapp.model.Category
 import com.example.recipesapp.utils.OnItemClickListener
 
 class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
-
-    companion object {
-        const val ARG_RECIPE = "arg_recipe"
-    }
 
     private var _recipesListBinding: FragmentListRecipesBinding? = null
     private val recipesListBinding
@@ -24,6 +21,7 @@ class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
             ?: throw IllegalStateException("Recipes List Binding, must not be null")
     private val recipesListVM: RecipesListViewModel by viewModels()
     private val recipesListAdapter = RecipesListAdapter()
+    private val args: RecipesListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,14 +36,13 @@ class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val args = requireArguments()
-        val categoryId = args.getInt(ARG_CATEGORY_ID)
-        initUI(categoryId)
+        val category = args.category
+        initUI(category)
     }
 
-    private fun initUI(categoryId: Int) {
+    private fun initUI(category: Category) {
         initRecycler()
-        recipesListVM.loadRecipesByCategoryId(categoryId)
+        recipesListVM.loadRecipesByCategoryId(category)
         recipesListVM.recipesListState.observe(viewLifecycleOwner) { state ->
             updateUi(state)
         }
