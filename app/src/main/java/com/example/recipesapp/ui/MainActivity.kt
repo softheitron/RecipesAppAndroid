@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         Log.i("!!!", "OnCreate выполняется на потоке: ${Thread.currentThread().name}")
 
-        val threadPool = Executors.newCachedThreadPool()
+        val threadPool = Executors.newFixedThreadPool(10)
         val json = Json { ignoreUnknownKeys = true }
         val thread = Thread {
             val categoryUrl = URL("https://recipes.androidsprint.ru/api/category")
