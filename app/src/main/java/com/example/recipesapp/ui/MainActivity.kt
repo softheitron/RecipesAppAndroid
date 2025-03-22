@@ -9,8 +9,9 @@ import com.example.recipesapp.databinding.ActivityMainBinding
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 import kotlinx.serialization.json.Json
-import java.net.HttpURLConnection
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
@@ -29,35 +30,31 @@ class MainActivity : AppCompatActivity() {
 
         val threadPool = Executors.newFixedThreadPool(10)
         val json = Json { ignoreUnknownKeys = true }
-        val thread = Thread {
-            val categoryUrl = URL("https://recipes.androidsprint.ru/api/category")
-            val categoryConnection = categoryUrl.openConnection() as HttpURLConnection
-            categoryConnection.connect()
 
-            val data = categoryConnection.inputStream.bufferedReader().readText()
-            val categories = json.decodeFromString<List<Category>>(data)
-            val categoriesIds = categories.map { it.id }
-            categoriesIds.forEach { categoryId ->
-                threadPool.submit {
+        threadPool.submit {
+            Log.i("!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
+            val categoryUrl = "https://recipes.androidsprint.ru/api/category"
+            val logging = HttpLoggingInterceptor()
+                .setLevel(HttpLoggingInterceptor.Level.BODY)
+            val client = OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build()
+            client.newCall(createRequestByUrl(categoryUrl)).execute().use { categoryResponse ->
+                val data = categoryResponse.body?.string() ?: ""
+                val categories = json.decodeFromString<List<Category>>(data)
+                val categoriesIds = categories.map { it.id }
+                categoriesIds.forEach { categoryId ->
                     Log.i("!!!", "Thread pool поток: ${Thread.currentThread().name}")
-                    val recipesUrl =
-                        URL("https://recipes.androidsprint.ru/api/category/$categoryId/recipes")
-                    val recipesConnection = recipesUrl.openConnection() as HttpURLConnection
-                    recipesConnection.connect()
-
-                    val recipesData = recipesConnection.inputStream.bufferedReader().readText()
-                    val recipes = json.decodeFromString<List<Recipe>>(recipesData)
-                    Log.d("!!!", "Recipes: $recipes")
+                    val recipesUrl = "$categoryUrl/$categoryId/recipes"
+                    client.newCall(createRequestByUrl(recipesUrl)).execute()
+                        .use { recipeResponse ->
+                            val recipesData = recipeResponse.body?.string() ?: ""
+                            val recipes = json.decodeFromString<List<Recipe>>(recipesData)
+                            Log.d("!!!", "Recipes: $recipes")
+                        }
                 }
             }
-
-            Log.i("!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
-            Log.i("!!!", "ResponseCode: ${categoryConnection.responseCode}")
-            Log.i("!!!", "ResponseMessage: ${categoryConnection.responseMessage}")
-            Log.i("!!!", "ResponseBody: $data")
-            Log.i("!!!", "Категории: $categories")
         }
-        thread.start()
 
         with(binding) {
             btnFavorites.setOnClickListener {
@@ -71,4 +68,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+}
+
+private fun createRequestByUrl(url: String): Request {
+    val request = Request.Builder()
+        .url(url)
+        .build()
+    return request
 }
