@@ -39,7 +39,7 @@ class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
 
     private fun initUI() {
         initRecycler()
-        categoriesVM.loadCategories()
+        categoriesVM.loadCategories(requireContext())
         categoriesVM.categoriesState.observe(viewLifecycleOwner) { state ->
             updateUI(state)
         }
