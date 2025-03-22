@@ -37,13 +37,22 @@ class IngredientsAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
-        val multipliedValue = BigDecimal(ingredient.quantity) * BigDecimal(quantity)
-        val ingredientsQuantity = multipliedValue
-            .setScale(1, RoundingMode.HALF_UP)
-            .stripTrailingZeros()
-            .toPlainString()
+        val multipliedValue = try {
+            BigDecimal(ingredient.quantity) * BigDecimal(quantity)
+        } catch (e: Exception) {
+            null
+        }
+        if (multipliedValue != null) {
+            val ingredientsQuantity = multipliedValue
+                .setScale(1, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString()
+            holder.quantity.text = ingredientsQuantity
+        } else {
+            holder.quantity.text = ingredient.quantity
+        }
+
         holder.description.text = ingredient.description
-        holder.quantity.text = ingredientsQuantity
         holder.measure.text = ingredient.unitOfMeasure
     }
 

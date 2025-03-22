@@ -1,6 +1,7 @@
 package com.example.recipesapp.ui.recipes.favorites
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +51,8 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         with(favoritesFragmentBinding) {
             if (state.recipeList.isNotEmpty()) {
                 recyclerAdapter.dataSet = state.recipeList
+                rvFavorites.visibility = View.VISIBLE
+                tvFavoritesEmpty.visibility = View.GONE
             } else {
                 rvFavorites.visibility = View.GONE
                 tvFavoritesEmpty.visibility = View.VISIBLE
