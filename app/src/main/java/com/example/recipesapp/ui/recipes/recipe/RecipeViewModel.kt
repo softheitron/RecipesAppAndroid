@@ -2,11 +2,14 @@ package com.example.recipesapp.ui.recipes.recipe
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.recipesapp.data.STUB
+import com.example.recipesapp.data.repository.RecipesRepository
 import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.utils.PreferencesUtils
 
@@ -18,19 +21,34 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val sharedPrefs =
         application.getSharedPreferences(RecipeFragment.FAVORITES_PREFS, Application.MODE_PRIVATE)
 
+    private val repository = RecipesRepository()
+
     fun loadRecipe(recipeId: Int) {
-        val iconState = PreferencesUtils.getFavorites(sharedPrefs)
-            .contains(recipeId.toString())
-        val recipe = STUB.getRecipeById(recipeId)
-        val portionsAmount = _recipeUiState.value?.portionsAmount
-        val recipeImage = getImageFromAssets(recipe)
-        currentState = currentState.copy(
-            recipe = recipe,
-            iconState = iconState,
-            portionsAmount = portionsAmount ?: 1,
-            recipeImage = recipeImage
-        )
-        _recipeUiState.value = currentState
+        repository.threadPool.submit {
+            val recipe = repository.getRecipeById(recipeId)
+            Log.i("!!!!", recipe.toString())
+            if (recipe != null) {
+                val iconState = PreferencesUtils.getFavorites(sharedPrefs)
+                    .contains(recipeId.toString())
+                val portionsAmount = _recipeUiState.value?.portionsAmount
+                val recipeImage = getImageFromAssets(recipe)
+                currentState = currentState.copy(
+                    recipe = recipe,
+                    iconState = iconState,
+                    portionsAmount = portionsAmount ?: 1,
+                    recipeImage = recipeImage
+                )
+                _recipeUiState.postValue(currentState)
+            } else {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        getApplication(),
+                        "Recipe information error",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun getImageFromAssets(recipe: Recipe?): Drawable? {

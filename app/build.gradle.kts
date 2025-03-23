@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.converter.kotlinx.serialization)
+    implementation(libs.retrofit)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
     implementation(libs.kotlinx.serialization.json)
