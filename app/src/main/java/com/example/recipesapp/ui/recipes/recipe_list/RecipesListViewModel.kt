@@ -1,9 +1,6 @@
 package com.example.recipesapp.ui.recipes.recipe_list
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,17 +23,13 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                 currentState = currentState.copy(
                     recipeList = recipeList,
                     category = category,
-                    categoryImagePath = category.imageUrl
+                    categoryImagePath = category.imageUrl,
+                    isError = false
                 )
                 _recipesListState.postValue(currentState)
             } else {
-                Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(
-                        getApplication(),
-                        "It seems like our server doesn't have any recipes yet",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                currentState = currentState.copy(isError = true)
+                _recipesListState.postValue(currentState)
             }
         }
     }
@@ -45,6 +38,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         val recipeList: List<Recipe> = emptyList(),
         val category: Category? = null,
         val categoryImagePath: String? = null,
+        val isError: Boolean = false
     )
 
 }

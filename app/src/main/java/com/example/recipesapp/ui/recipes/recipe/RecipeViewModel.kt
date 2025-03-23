@@ -34,16 +34,15 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     recipe = recipe,
                     iconState = iconState,
                     portionsAmount = portionsAmount ?: 1,
-                    recipeImagePath = recipe.imageUrl
+                    recipeImagePath = recipe.imageUrl,
+                    isError = false
                 )
                 _recipeUiState.postValue(currentState)
             } else {
+                currentState = currentState.copy(isError = true)
+                _recipeUiState.postValue(currentState)
                 Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(
-                        getApplication(),
-                        "Recipe information error",
-                        Toast.LENGTH_LONG
-                    ).show()
+
                 }
             }
         }
@@ -70,6 +69,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val iconState: Boolean = false,
         val portionsAmount: Int = 1,
         val recipeImagePath: String? = null,
+        val isError: Boolean = false
     )
 
 }

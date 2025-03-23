@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -39,14 +40,20 @@ class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
 
     private fun initUI() {
         initRecycler()
-        categoriesVM.loadCategories(requireContext())
+        categoriesVM.loadCategories()
         categoriesVM.categoriesState.observe(viewLifecycleOwner) { state ->
             updateUI(state)
         }
     }
 
     private fun updateUI(state: CategoriesListViewModel.CategoriesListState) {
-        categoriesListAdapter.dataSet = state.categoriesList
+        if (state.isError) {
+            Toast.makeText(requireContext(),
+                "Couldn't find any categories yet",
+                Toast.LENGTH_SHORT).show()
+        } else {
+            categoriesListAdapter.dataSet = state.categoriesList
+        }
     }
 
     private fun initRecycler() {
