@@ -1,10 +1,8 @@
 package com.example.recipesapp.ui.recipes.recipe_list
 
 import android.app.Application
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -25,11 +23,10 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         repository.threadPool.submit {
             val recipeList = repository.getRecipesByCategoryId(category.id)
             if (recipeList != null) {
-                val categoryImage = getImageFromAssets(category)
                 currentState = currentState.copy(
                     recipeList = recipeList,
                     category = category,
-                    categoryImage = categoryImage
+                    categoryImagePath = category.imageUrl
                 )
                 _recipesListState.postValue(currentState)
             } else {
@@ -44,28 +41,10 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    private fun getImageFromAssets(category: Category): Drawable? {
-        val categoryImage = try {
-            Drawable.createFromStream(
-                getApplication<Application>().assets.open(
-                    category.imageUrl
-                ),
-                null
-            )
-        } catch (e: Exception) {
-            Log.d(
-                "!!!",
-                "Image file not found ${_recipesListState.value?.category?.imageUrl}"
-            )
-            null
-        }
-        return categoryImage
-    }
-
     data class RecipesListState(
         val recipeList: List<Recipe> = emptyList(),
         val category: Category? = null,
-        val categoryImage: Drawable? = null,
+        val categoryImagePath: String? = null,
     )
 
 }

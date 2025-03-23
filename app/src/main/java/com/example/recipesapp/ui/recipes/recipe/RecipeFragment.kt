@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.recipesapp.R
+import com.example.recipesapp.data.repository.RecipesRepository.Companion.IMAGES_API_URL
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
@@ -87,7 +89,13 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
             }
             tvPortions.text =
                 "${getString(R.string.recipe_portions_text)} ${state.portionsAmount}"
-            imgRecipeTitle.setImageDrawable(state.recipeImage)
+            Glide
+                .with(requireContext())
+                .load(IMAGES_API_URL + state.recipeImagePath)
+                .centerCrop()
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(imgRecipeTitle)
             tvRecipeHeader.text = state.recipe?.title
             btnAddToFavorites.setImageResource(
                 if (state.iconState) R.drawable.ic_heart
