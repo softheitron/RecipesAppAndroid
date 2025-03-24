@@ -1,10 +1,6 @@
 package com.example.recipesapp.ui.recipes.favorites
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,14 +26,6 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
             if (recipeList != null) {
                 currentState = currentState.copy(recipeList = recipeList)
                 _favoritesState.postValue(currentState)
-            } else {
-                Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(
-                        getApplication(),
-                        "Recipe information error",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
             }
         }
     }

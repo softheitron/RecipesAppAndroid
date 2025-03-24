@@ -15,6 +15,7 @@ class RecipesRepository {
     companion object {
         const val CONTENT_TYPE = "application/json"
         const val BASE_API_URL = "https://recipes.androidsprint.ru/api/"
+        const val IMAGES_API_URL = BASE_API_URL + "images/"
     }
 
     val threadPool = Executors.newFixedThreadPool(10)

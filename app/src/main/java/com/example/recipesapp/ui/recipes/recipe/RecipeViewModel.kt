@@ -1,7 +1,6 @@
 package com.example.recipesapp.ui.recipes.recipe
 
 import android.app.Application
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -31,43 +30,22 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 val iconState = PreferencesUtils.getFavorites(sharedPrefs)
                     .contains(recipeId.toString())
                 val portionsAmount = _recipeUiState.value?.portionsAmount
-                val recipeImage = getImageFromAssets(recipe)
                 currentState = currentState.copy(
                     recipe = recipe,
                     iconState = iconState,
                     portionsAmount = portionsAmount ?: 1,
-                    recipeImage = recipeImage
+                    recipeImagePath = recipe.imageUrl,
+                    isError = false
                 )
                 _recipeUiState.postValue(currentState)
             } else {
+                currentState = currentState.copy(isError = true)
+                _recipeUiState.postValue(currentState)
                 Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(
-                        getApplication(),
-                        "Recipe information error",
-                        Toast.LENGTH_LONG
-                    ).show()
+
                 }
             }
         }
-    }
-
-    private fun getImageFromAssets(recipe: Recipe?): Drawable? {
-        val categoryImage = try {
-            Drawable.createFromStream(
-                recipe?.let {
-                    getApplication<Application>().assets.open(
-                        it.imageUrl
-                    )
-                }, null
-            )
-        } catch (e: Exception) {
-            Log.d(
-                "!!!",
-                "Image file not found ${_recipeUiState.value?.recipe?.imageUrl}"
-            )
-            null
-        }
-        return categoryImage
     }
 
     fun onFavoritesClicked() {
@@ -90,7 +68,8 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val recipe: Recipe? = null,
         val iconState: Boolean = false,
         val portionsAmount: Int = 1,
-        val recipeImage: Drawable? = null,
+        val recipeImagePath: String? = null,
+        val isError: Boolean = false
     )
 
 }

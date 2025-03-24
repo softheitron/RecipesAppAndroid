@@ -1,10 +1,11 @@
 package com.example.recipesapp.ui.recipes.recipe_list
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.recipesapp.R
+import com.example.recipesapp.data.repository.RecipesRepository.Companion.IMAGES_API_URL
 import com.example.recipesapp.databinding.ItemRecipeBinding
 import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.utils.OnItemClickListener
@@ -41,14 +42,13 @@ class RecipesListAdapter :
         holder.titleText.text = recipe.title
         holder.itemCard.setOnClickListener { itemClickListener?.onItemClick(recipe.id) }
         holder.itemCard.contentDescription = recipe.title
-        val drawable =
-            try {
-                Drawable.createFromStream(context.assets.open(recipe.imageUrl), null)
-            } catch (e: Exception) {
-                Log.d("!!!", "Image file not found ${recipe.imageUrl}")
-                null
-            }
-        holder.recipeImage.setImageDrawable(drawable)
+        Glide
+            .with(context)
+            .load(IMAGES_API_URL + recipe.imageUrl)
+            .centerCrop()
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(holder.recipeImage)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

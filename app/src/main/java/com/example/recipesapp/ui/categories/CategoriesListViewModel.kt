@@ -1,9 +1,5 @@
 package com.example.recipesapp.ui.categories
 
-import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,26 +14,23 @@ class CategoriesListViewModel : ViewModel() {
 
     private val repository = RecipesRepository()
 
-    fun loadCategories(context: Context) {
+    fun loadCategories() {
         repository.threadPool.submit {
             val categoriesList = repository.getCategories()
             if (categoriesList != null) {
-                currentState = currentState.copy(categoriesList = categoriesList)
+                currentState = currentState.copy(
+                    categoriesList = categoriesList,
+                    isError = false)
                 _categoriesState.postValue(currentState)
             } else {
-                Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(
-                        context,
-                        "It seems like our server doesn't have any categories yet",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                currentState = currentState.copy(isError = true)
             }
         }
     }
 
     data class CategoriesListState(
-        val categoriesList: List<Category> = emptyList()
+        val categoriesList: List<Category> = emptyList(),
+        val isError: Boolean = false
     )
 
 }
