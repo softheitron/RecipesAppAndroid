@@ -3,8 +3,10 @@ package com.example.recipesapp.ui.categories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.data.repository.RecipesRepository
 import com.example.recipesapp.model.Category
+import kotlinx.coroutines.launch
 
 class CategoriesListViewModel : ViewModel() {
 
@@ -15,12 +17,13 @@ class CategoriesListViewModel : ViewModel() {
     private val repository = RecipesRepository()
 
     fun loadCategories() {
-        repository.threadPool.submit {
+        viewModelScope.launch {
             val categoriesList = repository.getCategories()
             if (categoriesList != null) {
                 currentState = currentState.copy(
                     categoriesList = categoriesList,
-                    isError = false)
+                    isError = false
+                )
                 _categoriesState.postValue(currentState)
             } else {
                 currentState = currentState.copy(isError = true)

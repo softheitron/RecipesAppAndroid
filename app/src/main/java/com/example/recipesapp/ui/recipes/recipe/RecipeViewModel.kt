@@ -4,13 +4,14 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.data.repository.RecipesRepository
 import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.utils.PreferencesUtils
+import kotlinx.coroutines.launch
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,7 +24,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val repository = RecipesRepository()
 
     fun loadRecipe(recipeId: Int) {
-        repository.threadPool.submit {
+        viewModelScope.launch {
             val recipe = repository.getRecipeById(recipeId)
             Log.i("!!!!", recipe.toString())
             if (recipe != null) {

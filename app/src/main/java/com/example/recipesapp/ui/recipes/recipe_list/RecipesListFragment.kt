@@ -52,10 +52,12 @@ class RecipesListFragment : Fragment(R.layout.fragment_list_recipes) {
     }
 
     private fun updateUi(state: RecipesListViewModel.RecipesListState) {
-        if(state.isError) {
-            Toast.makeText(requireContext(),
+        if (state.isError) {
+            Toast.makeText(
+                requireContext(),
                 "Couldn't find recipe list",
-                Toast.LENGTH_SHORT).show()
+                Toast.LENGTH_SHORT
+            ).show()
         } else {
             recipesListAdapter.dataSet = state.recipeList
             with(recipesListBinding) {

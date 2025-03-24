@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.data.repository.RecipesRepository
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
+import kotlinx.coroutines.launch
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -17,7 +19,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     private val repository = RecipesRepository()
 
     fun loadRecipesByCategoryId(category: Category) {
-        repository.threadPool.submit {
+        viewModelScope.launch {
             val recipeList = repository.getRecipesByCategoryId(category.id)
             if (recipeList != null) {
                 currentState = currentState.copy(
