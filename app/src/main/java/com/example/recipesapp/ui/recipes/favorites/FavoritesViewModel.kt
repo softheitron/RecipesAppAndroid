@@ -4,10 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.data.repository.RecipesRepository
 import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.example.recipesapp.utils.PreferencesUtils
+import kotlinx.coroutines.launch
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -20,7 +22,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     private val repository = RecipesRepository()
 
     fun loadRecipesByFavoritesIds() {
-        repository.threadPool.submit {
+        viewModelScope.launch {
             val favoritesIds = PreferencesUtils.getFavorites(sharedPrefs).map { it.toInt() }.toSet()
             val recipeList = repository.getRecipesByIds(favoritesIds.joinToString(","))
             if (recipeList != null) {

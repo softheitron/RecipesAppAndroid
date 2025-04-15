@@ -48,9 +48,11 @@ class CategoriesListFragment : Fragment(R.layout.fragment_list_categories) {
 
     private fun updateUI(state: CategoriesListViewModel.CategoriesListState) {
         if (state.isError) {
-            Toast.makeText(requireContext(),
+            Toast.makeText(
+                requireContext(),
                 "Couldn't find any categories yet",
-                Toast.LENGTH_SHORT).show()
+                Toast.LENGTH_SHORT
+            ).show()
         } else {
             categoriesListAdapter.dataSet = state.categoriesList
         }
