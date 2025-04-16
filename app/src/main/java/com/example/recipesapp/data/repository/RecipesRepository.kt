@@ -1,6 +1,9 @@
 package com.example.recipesapp.data.repository
 
+import android.content.Context
+import androidx.room.Room
 import com.example.recipesapp.data.RecipeApiService
+import com.example.recipesapp.data.db.AppDatabase
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.CoroutineDispatcher
@@ -13,11 +16,23 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-class RecipesRepository(private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+class RecipesRepository(context: Context) {
     companion object {
         const val CONTENT_TYPE = "application/json"
         const val BASE_API_URL = "https://recipes.androidsprint.ru/api/"
         const val IMAGES_API_URL = BASE_API_URL + "images/"
+    }
+
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO
+
+    private val appContext = context.applicationContext
+
+    private val db by lazy {
+        Room.databaseBuilder(
+            appContext,
+            AppDatabase::class.java,
+            "recipes-database"
+        ).build()
     }
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -35,6 +50,18 @@ class RecipesRepository(private val defaultDispatcher: CoroutineDispatcher = Dis
         .build()
 
     private val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
+
+    suspend fun getCategoriesFromCache(): List<Category> {
+        return withContext(defaultDispatcher) {
+            db.categoriesDao().getAll()
+        }
+    }
+
+    suspend fun saveCategoriesInCache(categories: List<Category>) {
+        return withContext(defaultDispatcher) {
+            db.categoriesDao().insertCategories(categories)
+        }
+    }
 
     suspend fun getCategories(): List<Category>? {
         return withContext(defaultDispatcher) {

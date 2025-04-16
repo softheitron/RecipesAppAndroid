@@ -16,7 +16,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     val recipesListState: LiveData<RecipesListState> get() = _recipesListState
     private var currentState = _recipesListState.value ?: RecipesListState()
 
-    private val repository = RecipesRepository()
+    private val repository: RecipesRepository = RecipesRepository(application)
 
     fun loadRecipesByCategoryId(category: Category) {
         viewModelScope.launch {
