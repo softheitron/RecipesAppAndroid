@@ -21,7 +21,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val sharedPrefs =
         application.getSharedPreferences(RecipeFragment.FAVORITES_PREFS, Application.MODE_PRIVATE)
 
-    private val repository = RecipesRepository()
+    private val repository: RecipesRepository = RecipesRepository(application)
 
     fun loadRecipe(recipeId: Int) {
         viewModelScope.launch {
