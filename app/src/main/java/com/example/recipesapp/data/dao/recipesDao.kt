@@ -9,8 +9,20 @@ import com.example.recipesapp.model.Recipe
 @Dao
 interface RecipesDao {
     @Query("SELECT * FROM recipe")
-    fun getAllRecipes(): List<Recipe>
+    suspend fun getAllRecipes(): List<Recipe>
+
+    @Query("SELECT * FROM recipe WHERE id = :recipeId")
+    suspend fun getRecipeById(recipeId: Int): Recipe?
+
+    @Query("SELECT * FROM recipe WHERE isFavorite LIKE 1")
+    suspend fun getFavoriteRecipes(): List<Recipe>
+
+    @Query("UPDATE recipe SET isFavorite = :isFavorite WHERE id = :recipeId")
+    suspend fun updateFavoritesRecipe(recipeId: Int, isFavorite: Boolean)
+
+    @Query("SELECT * FROM recipe WHERE id BETWEEN :firstId AND :lastId")
+    suspend fun getRecipesByCategoryId(firstId: Int, lastId: Int): List<Recipe>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertRecipes(recipes: List<Recipe>)
+    suspend fun insertRecipes(recipes: List<Recipe>)
 }

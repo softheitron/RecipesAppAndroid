@@ -23,6 +23,11 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun loadRecipesByFavoritesIds() {
         viewModelScope.launch {
+            val favoriteRecipesFromCache = repository.getFavoriteRecipesFromCache()
+            if (favoriteRecipesFromCache.isNotEmpty()) {
+                currentState = currentState.copy(recipeList = favoriteRecipesFromCache)
+                _favoritesState.postValue(currentState)
+            }
             val favoritesIds = PreferencesUtils.getFavorites(sharedPrefs).map { it.toInt() }.toSet()
             val recipeList = repository.getRecipesByIds(favoritesIds.joinToString(","))
             if (recipeList != null) {

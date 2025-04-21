@@ -1,7 +1,6 @@
 package com.example.recipesapp.ui.recipes.recipe_list
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,12 +19,14 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     private val repository: RecipesRepository = RecipesRepository(application)
 
     fun loadRecipesByCategoryId(category: Category) {
-        _recipesListState.postValue(currentState.copy(
-            category = category,
-            categoryImagePath = category.imageUrl))
+        _recipesListState.postValue(
+            currentState.copy(
+                category = category,
+                categoryImagePath = category.imageUrl
+            )
+        )
         viewModelScope.launch {
             val recipesFromCache = repository.getRecipesFromCacheByCategory(category.id)
-            Log.i("!!!!", "$recipesFromCache")
             if (recipesFromCache.isNotEmpty()) {
                 currentState = currentState.copy(
                     recipeList = recipesFromCache,
@@ -35,7 +36,6 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                 )
                 _recipesListState.postValue(currentState)
             }
-            Log.i("!!!!", "$recipesFromCache")
             val recipeList = repository.getRecipesByCategoryId(category.id)
             if (recipeList != null) {
                 currentState = currentState.copy(
@@ -46,7 +46,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                 )
                 _recipesListState.postValue(currentState)
                 repository.saveRecipesInCache(recipeList)
-            } else if (recipesFromCache.isEmpty()){
+            } else if (recipesFromCache.isEmpty()) {
                 currentState = currentState.copy(isError = true)
                 _recipesListState.postValue(currentState)
             }
