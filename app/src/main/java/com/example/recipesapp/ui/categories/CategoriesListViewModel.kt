@@ -21,23 +21,25 @@ class CategoriesListViewModel(
 
     fun loadCategories() {
         viewModelScope.launch {
-            val categoriesFromDb = repository.getCategoriesFromCache()
-            if (categoriesFromDb.isNotEmpty()) {
+            val categoriesFromCache = repository.getCategoriesFromCache()
+            if (categoriesFromCache.isNotEmpty()) {
                 currentState = currentState.copy(
-                    categoriesList = categoriesFromDb,
+                    categoriesList = categoriesFromCache,
                     isError = false
                 )
                 _categoriesState.postValue(currentState)
-            } else {
-                val categoriesList = repository.getCategories()
-                if (categoriesList != null) {
-                    repository.saveCategoriesInCache(categoriesList)
-                    currentState = currentState.copy(
-                        categoriesList = categoriesList,
-                        isError = false
-                    )
-                    _categoriesState.postValue(currentState)
-                } else currentState = currentState.copy(isError = true)
+            }
+            val categoriesList = repository.getCategories()
+            if (categoriesList != null) {
+                repository.saveCategoriesInCache(categoriesList)
+                currentState = currentState.copy(
+                    categoriesList = categoriesList,
+                    isError = false
+                )
+                _categoriesState.postValue(currentState)
+            } else if (categoriesFromCache.isEmpty()) {
+                currentState = currentState.copy(isError = true)
+                _categoriesState.postValue(currentState)
             }
         }
     }
