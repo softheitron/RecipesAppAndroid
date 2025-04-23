@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.data.repository.RecipesRepository
 import com.example.recipesapp.model.Recipe
-import com.example.recipesapp.utils.PreferencesUtils
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
@@ -15,8 +14,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _recipeUiState = MutableLiveData(RecipeState())
     val recipeUiState: LiveData<RecipeState> get() = _recipeUiState
     private var currentState = _recipeUiState.value ?: RecipeState()
-    private val sharedPrefs =
-        application.getSharedPreferences(RecipeFragment.FAVORITES_PREFS, Application.MODE_PRIVATE)
 
     private val repository: RecipesRepository = RecipesRepository(application)
 
@@ -24,12 +21,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             val recipeFromCache = repository.getRecipeFromCacheById(recipeId)
             if (recipeFromCache != null) {
-                val iconState = PreferencesUtils.getFavorites(sharedPrefs)
-                    .contains(recipeId.toString())
                 val portionsAmount = _recipeUiState.value?.portionsAmount
                 currentState = currentState.copy(
                     recipe = recipeFromCache,
-                    iconState = iconState,
+                    iconState = recipeFromCache.isFavorite,
                     portionsAmount = portionsAmount ?: 1,
                     recipeImagePath = recipeFromCache.imageUrl,
                     isError = false
@@ -38,12 +33,9 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             }
             val recipe = repository.getRecipeById(recipeId)
             if (recipe != null) {
-                val iconState = PreferencesUtils.getFavorites(sharedPrefs)
-                    .contains(recipeId.toString())
                 val portionsAmount = _recipeUiState.value?.portionsAmount
                 currentState = currentState.copy(
                     recipe = recipe,
-                    iconState = iconState,
                     portionsAmount = portionsAmount ?: 1,
                     recipeImagePath = recipe.imageUrl,
                     isError = false
@@ -57,19 +49,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun onFavoritesClicked() {
-        val favorites = PreferencesUtils.getFavorites(sharedPrefs)
         val iconState = _recipeUiState.value?.iconState
         val recipeId = _recipeUiState.value?.recipe?.id
 
         if (iconState != null && recipeId != null) {
             val newIconState = !iconState
             _recipeUiState.value = _recipeUiState.value?.copy(iconState = newIconState)
-            if (newIconState) {
-                favorites.add(recipeId.toString())
-            } else {
-                favorites.remove(recipeId.toString())
-            }
-            PreferencesUtils.saveFavorites(sharedPrefs, favorites)
 
             viewModelScope.launch {
                 repository.updateCachedFavoriteRecipe(recipeId, newIconState)

@@ -124,10 +124,20 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getRecipesByCategoryId(id: Int): List<Recipe>? {
+    suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         return withContext(defaultDispatcher) {
             try {
-                service.getRecipesByCategoryId(id)
+                val recipesFromAPI = service.getRecipesByCategoryId(categoryId)
+                val favoriteAssociatedMap = db.recipesDao().getRecipesByCategoryId(
+                    firstId = (categoryId * RECIPE_STANDARD_MULTIPLIER),
+                    lastId = (categoryId * RECIPE_STANDARD_MULTIPLIER + MAX_RECIPES)).associate {
+                        it.id to it.isFavorite
+                }
+                val finalRecipes = recipesFromAPI.map { recipe ->
+                    val isFavorite = favoriteAssociatedMap[recipe.id] ?: recipe.isFavorite
+                    recipe.copy(isFavorite = isFavorite)
+                }
+                finalRecipes
             } catch (e: Exception) {
                 null
             }

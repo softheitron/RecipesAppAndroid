@@ -24,5 +24,8 @@ interface RecipesDao {
     suspend fun getRecipesByCategoryId(firstId: Int, lastId: Int): List<Recipe>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveFavoriteRecipe(recipes: Recipe)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipes(recipes: List<Recipe>)
 }
