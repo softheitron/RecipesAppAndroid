@@ -9,8 +9,8 @@ import com.example.recipesapp.model.Category
 @Dao
 interface CategoriesDao {
     @Query("SELECT * FROM category")
-    fun getAllCategories(): List<Category>
+    suspend fun getAllCategories(): List<Category>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCategories(categories: List<Category>)
+    suspend fun insertCategories(categories: List<Category>)
 }

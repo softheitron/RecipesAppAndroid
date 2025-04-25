@@ -1,7 +1,6 @@
 package com.example.recipesapp.data.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Room
 import com.example.recipesapp.data.RecipeApiService
 import com.example.recipesapp.data.db.AppDatabase
@@ -20,6 +19,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 class RecipesRepository(context: Context) {
     companion object {
         const val MAX_RECIPES = 99
+        const val RECIPE_STANDARD_MULTIPLIER = 100
         const val CONTENT_TYPE = "application/json"
         const val BASE_API_URL = "https://recipes.androidsprint.ru/api/"
         const val IMAGES_API_URL = BASE_API_URL + "images/"
@@ -33,8 +33,9 @@ class RecipesRepository(context: Context) {
         Room.databaseBuilder(
             appContext,
             AppDatabase::class.java,
-            "recipes-database")
-            .fallbackToDestructiveMigration()
+            "recipes-database"
+        )
+            .fallbackToDestructiveMigration(false)
             .build()
     }
 
@@ -56,9 +57,32 @@ class RecipesRepository(context: Context) {
 
     suspend fun getRecipesFromCacheByCategory(categoryId: Int): List<Recipe> {
         return withContext(defaultDispatcher) {
-            db.recipesDao().getAllRecipes().filter { recipe ->
-                recipe.id in (categoryId * 100)..(categoryId * 100 + MAX_RECIPES)
+            db.recipesDao().getRecipesByCategoryId(
+                firstId = (categoryId * RECIPE_STANDARD_MULTIPLIER),
+                lastId = (categoryId * RECIPE_STANDARD_MULTIPLIER + MAX_RECIPES)
+            )
+        }
+    }
+
+    suspend fun getRecipeFromCacheById(recipeId: Int): Recipe? {
+        return withContext(defaultDispatcher) {
+            try {
+                db.recipesDao().getRecipeById(recipeId)
+            } catch (e: Exception) {
+                null
             }
+        }
+    }
+
+    suspend fun getFavoriteRecipesFromCache(): List<Recipe> {
+        return withContext(defaultDispatcher) {
+            db.recipesDao().getFavoriteRecipes()
+        }
+    }
+
+    suspend fun updateCachedFavoriteRecipe(recipeId: Int, isFavorite: Boolean) {
+        return withContext(defaultDispatcher) {
+            db.recipesDao().updateFavoritesRecipe(recipeId, isFavorite)
         }
     }
 
@@ -100,10 +124,20 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getRecipesByCategoryId(id: Int): List<Recipe>? {
+    suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         return withContext(defaultDispatcher) {
             try {
-                service.getRecipesByCategoryId(id)
+                val recipesFromAPI = service.getRecipesByCategoryId(categoryId)
+                val favoriteAssociatedMap = db.recipesDao().getRecipesByCategoryId(
+                    firstId = (categoryId * RECIPE_STANDARD_MULTIPLIER),
+                    lastId = (categoryId * RECIPE_STANDARD_MULTIPLIER + MAX_RECIPES)).associate {
+                        it.id to it.isFavorite
+                }
+                val finalRecipes = recipesFromAPI.map { recipe ->
+                    val isFavorite = favoriteAssociatedMap[recipe.id] ?: recipe.isFavorite
+                    recipe.copy(isFavorite = isFavorite)
+                }
+                finalRecipes
             } catch (e: Exception) {
                 null
             }
