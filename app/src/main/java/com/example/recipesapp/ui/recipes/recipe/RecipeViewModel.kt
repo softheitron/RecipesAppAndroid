@@ -1,25 +1,24 @@
 package com.example.recipesapp.ui.recipes.recipe
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.data.repository.RecipesRepository
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class RecipeViewModel(application: Application) : AndroidViewModel(application) {
+class RecipeViewModel(
+    private val recipesRepository: RecipesRepository
+) : ViewModel() {
 
     private val _recipeUiState = MutableLiveData(RecipeState())
     val recipeUiState: LiveData<RecipeState> get() = _recipeUiState
     private var currentState = _recipeUiState.value ?: RecipeState()
 
-    private val repository: RecipesRepository = RecipesRepository(application)
-
     fun loadRecipe(recipeId: Int) {
         viewModelScope.launch {
-            val recipeFromCache = repository.getRecipeFromCacheById(recipeId)
+            val recipeFromCache = recipesRepository.getRecipeFromCacheById(recipeId)
             if (recipeFromCache != null) {
                 val portionsAmount = _recipeUiState.value?.portionsAmount
                 currentState = currentState.copy(
@@ -31,7 +30,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 )
                 _recipeUiState.postValue(currentState)
             }
-            val recipe = repository.getRecipeById(recipeId)
+            val recipe = recipesRepository.getRecipeById(recipeId)
             if (recipe != null) {
                 val portionsAmount = _recipeUiState.value?.portionsAmount
                 currentState = currentState.copy(
@@ -57,7 +56,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             _recipeUiState.value = _recipeUiState.value?.copy(iconState = newIconState)
 
             viewModelScope.launch {
-                repository.updateCachedFavoriteRecipe(recipeId, newIconState)
+                recipesRepository.updateCachedFavoriteRecipe(recipeId, newIconState)
             }
         }
     }

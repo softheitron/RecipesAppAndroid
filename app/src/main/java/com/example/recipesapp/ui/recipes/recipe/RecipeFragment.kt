@@ -9,31 +9,33 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.recipesapp.R
-import com.example.recipesapp.data.repository.RecipesRepository.Companion.IMAGES_API_URL
+import com.example.recipesapp.RecipesApplication
+import com.example.recipesapp.data.di.AppContainer.Companion.IMAGES_API_URL
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment(R.layout.fragment_recipe) {
-
-    companion object {
-        const val FAVORITES_PREFS = "favorites_prefs"
-        const val FAVORITES_SAVE_ID = "favorites_save_id"
-    }
 
     private var _recipeBinding: FragmentRecipeBinding? = null
     private val recipeBinding
         get() = _recipeBinding
             ?: throw IllegalStateException("Recipes List Binding, must not be null")
 
-    private val recipeVM: RecipeViewModel by viewModels()
+    private lateinit var recipeVM: RecipeViewModel
     private val recyclerIngredients = IngredientsAdapter()
     private val recyclerMethod = MethodAdapter()
     private val args: RecipeFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        recipeVM = appContainer.recipeViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,6 +107,7 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                     .error(R.drawable.img_error)
                     .into(imgRecipeTitle)
                 tvRecipeHeader.text = state.recipe?.title
+
                 btnAddToFavorites.setImageResource(
                     if (state.iconState) R.drawable.ic_heart
                     else R.drawable.ic_heart_empty
