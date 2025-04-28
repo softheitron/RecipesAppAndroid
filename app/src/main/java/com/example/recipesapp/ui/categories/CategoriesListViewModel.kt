@@ -27,14 +27,14 @@ class CategoriesListViewModel(
                 _categoriesState.postValue(currentState)
             }
             val categoriesList = recipesRepository.getCategories()
-            if (categoriesList != null) {
+            if (categoriesList != null && categoriesList != categoriesFromCache) {
                 recipesRepository.saveCategoriesInCache(categoriesList)
                 currentState = currentState.copy(
                     categoriesList = categoriesList,
                     isError = false
                 )
                 _categoriesState.postValue(currentState)
-            } else if (categoriesFromCache.isEmpty()) {
+            } else if (categoriesFromCache.isEmpty() && categoriesList.isNullOrEmpty()) {
                 currentState = currentState.copy(isError = true)
                 _categoriesState.postValue(currentState)
             }

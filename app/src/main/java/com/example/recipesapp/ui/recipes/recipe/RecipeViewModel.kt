@@ -18,59 +18,59 @@ class RecipeViewModel(
 
     fun loadRecipe(recipeId: Int) {
         viewModelScope.launch {
+            val portionsAmount = _recipeUiState.value?.portionsAmount
             val recipeFromCache = recipesRepository.getRecipeFromCacheById(recipeId)
             if (recipeFromCache != null) {
-                val portionsAmount = _recipeUiState.value?.portionsAmount
                 currentState = currentState.copy(
                     recipe = recipeFromCache,
-                    iconState = recipeFromCache.isFavorite,
                     portionsAmount = portionsAmount ?: 1,
                     recipeImagePath = recipeFromCache.imageUrl,
                     isError = false
                 )
                 _recipeUiState.postValue(currentState)
             }
+
             val recipe = recipesRepository.getRecipeById(recipeId)
-            if (recipe != null) {
-                val portionsAmount = _recipeUiState.value?.portionsAmount
+            if (recipe != null && recipe != recipeFromCache) {
+                val isFavorite = recipesRepository.getIsFavoriteFlag(recipeId) ?: false
+                val finalRecipe = recipe.copy(isFavorite = isFavorite)
                 currentState = currentState.copy(
-                    recipe = recipe,
+                    recipe = finalRecipe,
                     portionsAmount = portionsAmount ?: 1,
                     recipeImagePath = recipe.imageUrl,
                     isError = false
                 )
                 _recipeUiState.postValue(currentState)
-            } else if (recipeFromCache == null) {
+                recipesRepository.updateRecipe(finalRecipe)
+            } else if (recipe == null && recipeFromCache == null) {
                 currentState = currentState.copy(isError = true)
                 _recipeUiState.postValue(currentState)
             }
         }
     }
 
-    fun onFavoritesClicked() {
-        val iconState = _recipeUiState.value?.iconState
-        val recipeId = _recipeUiState.value?.recipe?.id
+fun onFavoritesClicked() {
+    var recipe = _recipeUiState.value?.recipe
+    if (recipe != null) {
+        val isFavorite = recipe.isFavorite
+        recipe = recipe.copy(isFavorite = !isFavorite)
+        _recipeUiState.value = _recipeUiState.value?.copy(recipe = recipe)
 
-        if (iconState != null && recipeId != null) {
-            val newIconState = !iconState
-            _recipeUiState.value = _recipeUiState.value?.copy(iconState = newIconState)
-
-            viewModelScope.launch {
-                recipesRepository.updateCachedFavoriteRecipe(recipeId, newIconState)
-            }
+        viewModelScope.launch {
+            recipesRepository.updateRecipe(recipe)
         }
     }
+}
 
-    fun updatePortionsAmount(portionsAmount: Int) {
-        _recipeUiState.value = _recipeUiState.value?.copy(portionsAmount = portionsAmount)
-    }
+fun updatePortionsAmount(portionsAmount: Int) {
+    _recipeUiState.value = _recipeUiState.value?.copy(portionsAmount = portionsAmount)
+}
 
-    data class RecipeState(
-        val recipe: Recipe? = null,
-        val iconState: Boolean = false,
-        val portionsAmount: Int = 1,
-        val recipeImagePath: String? = null,
-        val isError: Boolean = false
-    )
+data class RecipeState(
+    val recipe: Recipe? = null,
+    val portionsAmount: Int = 1,
+    val recipeImagePath: String? = null,
+    val isError: Boolean = false
+)
 
 }

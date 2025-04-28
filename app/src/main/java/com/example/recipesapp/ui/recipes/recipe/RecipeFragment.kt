@@ -109,7 +109,7 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 tvRecipeHeader.text = state.recipe?.title
 
                 btnAddToFavorites.setImageResource(
-                    if (state.iconState) R.drawable.ic_heart
+                    if (state.recipe?.isFavorite == true) R.drawable.ic_heart
                     else R.drawable.ic_heart_empty
                 )
             }

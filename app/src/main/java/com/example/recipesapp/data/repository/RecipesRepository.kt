@@ -39,6 +39,18 @@ class RecipesRepository(
         }
     }
 
+    suspend fun getIsFavoriteFlag(recipeId: Int): Boolean? {
+        return withContext(ioDispatcher) {
+            recipesDao.getIsFavorite(recipeId)
+        }
+    }
+
+    suspend fun updateRecipe(recipe: Recipe) {
+        return withContext(ioDispatcher) {
+            recipesDao.saveRecipe(recipe)
+        }
+    }
+
     suspend fun getFavoriteRecipesFromCache(): List<Recipe> {
         return withContext(ioDispatcher) {
             recipesDao.getFavoriteRecipes()

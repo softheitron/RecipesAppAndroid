@@ -36,7 +36,7 @@ class RecipesListViewModel(
                 _recipesListState.postValue(currentState)
             }
             val recipeList = recipesRepository.getRecipesByCategoryId(category.id)
-            if (recipeList != null) {
+            if (recipeList != null && recipeList != recipesFromCache) {
                 currentState = currentState.copy(
                     recipeList = recipeList,
                     category = category,
@@ -45,7 +45,7 @@ class RecipesListViewModel(
                 )
                 _recipesListState.postValue(currentState)
                 recipesRepository.saveRecipesInCache(recipeList)
-            } else if (recipesFromCache.isEmpty()) {
+            } else if (recipesFromCache.isEmpty() && recipeList.isNullOrEmpty()) {
                 currentState = currentState.copy(isError = true)
                 _recipesListState.postValue(currentState)
             }
