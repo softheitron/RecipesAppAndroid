@@ -17,6 +17,9 @@ interface RecipesDao {
     @Query("SELECT * FROM recipe WHERE isFavorite LIKE 1")
     suspend fun getFavoriteRecipes(): List<Recipe>
 
+    @Query("SELECT isFavorite FROM recipe WHERE id = :recipeId")
+    suspend fun getIsFavorite(recipeId: Int): Boolean?
+
     @Query("UPDATE recipe SET isFavorite = :isFavorite WHERE id = :recipeId")
     suspend fun updateFavoritesRecipe(recipeId: Int, isFavorite: Boolean)
 
@@ -24,7 +27,7 @@ interface RecipesDao {
     suspend fun getRecipesByCategoryId(firstId: Int, lastId: Int): List<Recipe>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveFavoriteRecipe(recipes: Recipe)
+    suspend fun saveRecipe(recipe: Recipe)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipes(recipes: List<Recipe>)
