@@ -3,10 +3,10 @@ package com.example.recipesapp.data.repository
 import com.example.recipesapp.data.RecipeApiService
 import com.example.recipesapp.data.dao.CategoriesDao
 import com.example.recipesapp.data.dao.RecipesDao
+import com.example.recipesapp.di.IoDispatcher
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -14,13 +14,12 @@ class RecipesRepository @Inject constructor(
     private val recipesDao: RecipesDao,
     private val categoriesDao: CategoriesDao,
     private val recipeApiService: RecipeApiService,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
     companion object {
         const val MAX_RECIPES = 99
         const val RECIPE_STANDARD_MULTIPLIER = 100
     }
-
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     suspend fun getRecipesFromCacheByCategory(categoryId: Int): List<Recipe> {
         return withContext(ioDispatcher) {
