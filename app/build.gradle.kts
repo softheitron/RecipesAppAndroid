@@ -7,6 +7,7 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.devtools.ksp") version "2.1.0-1.0.29"
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -49,6 +50,8 @@ android {
 
 dependencies {
     ksp(libs.androidx.room.compiler)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.android)
     implementation(libs.androidx.room.runtime)
     implementation(libs.glide)
     implementation(libs.converter.kotlinx.serialization)

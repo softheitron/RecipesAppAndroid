@@ -1,4 +1,4 @@
-package com.example.recipesapp.data.di
+package com.example.recipesapp.di
 
 import com.example.recipesapp.data.repository.RecipesRepository
 import com.example.recipesapp.ui.categories.CategoriesListViewModel
