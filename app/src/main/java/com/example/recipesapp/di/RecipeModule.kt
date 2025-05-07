@@ -21,6 +21,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Qualifier
+import javax.inject.Singleton
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
@@ -44,6 +45,7 @@ class RecipeModule {
     @Provides
     fun provideIoDispatcher() : CoroutineDispatcher = Dispatchers.IO
 
+    @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(
@@ -54,20 +56,24 @@ class RecipeModule {
             .fallbackToDestructiveMigration(false)
             .build()
 
+    @Singleton
     @Provides
     fun provideCategoriesDao(database: AppDatabase): CategoriesDao =
         database.categoriesDao()
 
+    @Singleton
     @Provides
     fun provideRecipesDao(database: AppDatabase): RecipesDao =
         database.recipesDao()
 
+    @Singleton
     @Provides
     fun provideHttpClient(): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
 
+    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -77,6 +83,7 @@ class RecipeModule {
             .build()
     }
 
+    @Singleton
     @Provides
     fun provideRecipeApiService(retrofit: Retrofit): RecipeApiService {
         return retrofit.create(RecipeApiService::class.java)
