@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.recipesapp.R
-import com.example.recipesapp.data.di.AppContainer.Companion.IMAGES_API_URL
+import com.example.recipesapp.di.RecipeModule.Companion.IMAGES_API_URL
 import com.example.recipesapp.databinding.ItemRecipeBinding
 import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.utils.OnItemClickListener
